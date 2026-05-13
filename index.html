@@ -1,761 +1,889 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Pro Icon Forge | Photoshop-Quality Color Replacement + AI Upscale</title>
-  <!-- JSZip + FileSaver -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>Pro Icon Forge | পেশাদার কালার রিপ্লেসমেন্ট + 4K সাপোর্ট</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-  <!-- HTML2Canvas for high-quality canvas manipulation, plus upscale via smart resize -->
   <style>
     * {
+      margin: 0;
+      padding: 0;
       box-sizing: border-box;
-      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      font-family: 'Segoe UI', system-ui, -apple-system, 'Roboto', sans-serif;
     }
 
     body {
-      background: linear-gradient(145deg, #e0e8f0 0%, #cdd9e9 100%);
-      margin: 0;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
       min-height: 100vh;
-      padding: 2rem 1.5rem;
+      padding: 1rem;
     }
 
-    .pro-container {
-      max-width: 1600px;
+    .container {
+      max-width: 1400px;
       margin: 0 auto;
     }
 
-    .pro-card {
+    /* প্রফেশনাল কার্ড ডিজাইন */
+    .main-card {
       background: rgba(255, 255, 255, 0.98);
-      backdrop-filter: blur(0px);
-      border-radius: 2rem;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+      border-radius: 1.5rem;
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(2px);
     }
 
-    .pro-header {
-      background: #0a1a24;
-      padding: 1.2rem 2rem;
-      color: white;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .pro-header h1 {
-      font-size: 1.7rem;
-      font-weight: 700;
-      letter-spacing: -0.3px;
-      background: linear-gradient(135deg, #fff, #aad0ff);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    .badge-pro {
-      background: #1e4a6e;
-      padding: 6px 14px;
-      border-radius: 60px;
-      font-size: 0.7rem;
-      font-weight: 600;
-    }
-
-    .control-panel-pro {
-      background: #f4f9fe;
+    /* হেডার */
+    .header {
+      background: linear-gradient(135deg, #0f3460 0%, #1a4a6f 100%);
       padding: 1.5rem 2rem;
-      border-bottom: 1px solid #e2edf5;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-      align-items: center;
-      justify-content: space-between;
+      color: white;
     }
 
-    .color-lab {
+    .header h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 0.3rem 1rem;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    /* কন্ট্রোল প্যানেল */
+    .control-panel {
+      padding: 1.5rem;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .color-section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .color-box {
       display: flex;
       align-items: center;
       gap: 1rem;
       background: white;
-      padding: 6px 20px 6px 18px;
-      border-radius: 80px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      padding: 0.5rem 1.5rem;
+      border-radius: 60px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     }
 
-    .hex-pro {
-      border: 1px solid #cbdde9;
+    .hex-input {
+      border: 2px solid #e2e8f0;
       border-radius: 40px;
-      padding: 8px 14px;
+      padding: 0.6rem 1rem;
       font-family: monospace;
       font-weight: 700;
+      font-size: 1rem;
       width: 130px;
       text-align: center;
     }
 
-    .swatch-pro {
-      width: 44px;
-      height: 44px;
-      border-radius: 44px;
+    .color-swatch {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
       cursor: pointer;
-      border: 2px solid white;
+      border: 3px solid white;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s;
     }
 
-    .preset-palette {
-      background: #eef3fc;
-      padding: 8px 18px;
+    .color-swatch:hover {
+      transform: scale(1.05);
+    }
+
+    /* থ্রেশহোল্ড স্লাইডার */
+    .threshold-control {
+      background: white;
+      padding: 0.8rem 1.5rem;
       border-radius: 60px;
       display: flex;
-      gap: 10px;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .threshold-control label {
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    input[type="range"] {
+      width: 200px;
+      height: 5px;
+      border-radius: 5px;
+      background: #cbd5e1;
+    }
+
+    .threshold-value {
+      background: #0f3460;
+      color: white;
+      padding: 0.2rem 0.8rem;
+      border-radius: 40px;
+      font-weight: 700;
+      min-width: 60px;
+      text-align: center;
+    }
+
+    /* মোড ট্যাব */
+    .mode-tabs {
+      display: flex;
+      gap: 0.5rem;
+      background: #e2e8f0;
+      padding: 0.3rem;
+      border-radius: 60px;
+      flex-wrap: wrap;
+    }
+
+    .mode-btn {
+      padding: 0.6rem 1.5rem;
+      border-radius: 60px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+      border: none;
+      background: transparent;
+    }
+
+    .mode-btn.active {
+      background: #0f3460;
+      color: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    /* প্রিসেট কালার */
+    .preset-colors {
+      display: flex;
+      gap: 0.6rem;
       flex-wrap: wrap;
       align-items: center;
+      margin-top: 1rem;
     }
 
-    .preset-swatch {
-      width: 32px;
-      height: 32px;
-      border-radius: 32px;
+    .preset-item {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
       cursor: pointer;
-      transition: 0.1s;
-      border: 1px solid rgba(0, 0, 0, 0.1);
+      transition: transform 0.1s;
+      border: 2px solid white;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     }
 
-    .btn-pro {
+    .preset-item:hover {
+      transform: scale(1.1);
+    }
+
+    /* আপলোড এরিয়া */
+    .upload-area {
+      padding: 1.5rem;
+      background: #f1f5f9;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .btn {
       border: none;
-      padding: 10px 26px;
+      padding: 0.7rem 1.8rem;
       border-radius: 60px;
       font-weight: 700;
       cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .btn-primary-pro {
-      background: #156b42;
-      color: white;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .btn-primary-pro:hover {
-      background: #0e4f32;
-      transform: translateY(-1px);
-    }
-
-    .btn-accent {
-      background: #1c5a7a;
-      color: white;
-    }
-
-    .upload-pro {
-      background: #eef3fc;
-      padding: 1rem 2rem;
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .file-grid-pro {
-      padding: 1.8rem;
-      max-height: 550px;
-      overflow-y: auto;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.2rem;
-    }
-
-    .icon-card {
-      background: white;
-      border-radius: 1.5rem;
-      width: 190px;
-      padding: 1rem;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
       transition: all 0.2s;
-      border: 1px solid #eaf0f5;
+      font-size: 0.9rem;
     }
 
-    .icon-card img {
-      width: 110px;
-      height: 110px;
-      object-fit: contain;
-      border-radius: 20px;
-      background: #fbfeff;
+    .btn-primary {
+      background: linear-gradient(135deg, #0f3460, #1e4a6e);
+      color: white;
     }
 
-    .footer-pro {
-      background: #eef2f7;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     }
 
-    .quality-badge {
-      background: #d9f0e6;
+    .btn-success {
+      background: #15803d;
+      color: white;
+    }
+
+    .btn-warning {
+      background: #b91c1c;
+      color: white;
+    }
+
+    .stats {
+      background: white;
+      padding: 0.4rem 1rem;
       border-radius: 60px;
-      padding: 6px 15px;
-      font-size: 0.7rem;
+      font-size: 0.8rem;
       font-weight: 600;
     }
 
-    button {
-      font-family: inherit;
+    /* গ্রিড ভিউ - রেসপন্সিভ */
+    .image-grid {
+      padding: 1.5rem;
+      max-height: 550px;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1.2rem;
     }
 
-    .mode-tab {
-      background: #eaf0f5;
-      border-radius: 60px;
-      padding: 4px;
-      display: inline-flex;
+    .image-card {
+      background: white;
+      border-radius: 1rem;
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition: all 0.2s;
+      border: 1px solid #e2e8f0;
     }
 
-    .mode-opt {
-      padding: 6px 20px;
-      border-radius: 60px;
+    .image-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .image-card img {
+      width: 110px;
+      height: 110px;
+      object-fit: contain;
+      border-radius: 12px;
+      background: #f8fafc;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-top: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-small {
+      padding: 0.3rem 0.8rem;
+      font-size: 0.7rem;
+      border-radius: 40px;
+      border: none;
       cursor: pointer;
       font-weight: 600;
     }
 
-    .mode-opt.active {
-      background: #156b42;
-      color: white;
+    /* ফুটার */
+    .footer {
+      padding: 1rem 1.5rem;
+      background: #f1f5f9;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    /* মোবাইল রেসপন্সিভ */
+    @media (max-width: 768px) {
+      body {
+        padding: 0.5rem;
+      }
+
+      .header h1 {
+        font-size: 1.2rem;
+      }
+
+      .control-panel {
+        padding: 1rem;
+      }
+
+      .color-section {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .color-box {
+        justify-content: space-between;
+      }
+
+      .threshold-control {
+        justify-content: space-between;
+      }
+
+      .image-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 0.8rem;
+        padding: 1rem;
+      }
+
+      .image-card img {
+        width: 80px;
+        height: 80px;
+      }
+
+      .btn {
+        padding: 0.5rem 1.2rem;
+        font-size: 0.8rem;
+      }
+    }
+
+    /* স্ক্রলবার */
+    .image-grid::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .image-grid::-webkit-scrollbar-track {
+      background: #e2e8f0;
+      border-radius: 10px;
+    }
+
+    .image-grid::-webkit-scrollbar-thumb {
+      background: #0f3460;
+      border-radius: 10px;
     }
   </style>
 </head>
 
 <body>
-  <div class="pro-container">
-    <div class="pro-card">
-      <div class="pro-header">
-        <h1>🎨 PRO ICON FORGE · PHOTOSHOP GRADE</h1>
-        <div class="badge-pro">⚡ AI Upscale + PixelPerfect Recolor + AutoTrace Pro</div>
+  <div class="container">
+    <div class="main-card">
+      <div class="header">
+        <h1>
+          🎨 PRO ICON FORGE
+          <span class="badge">⚡ 4K সাপোর্ট | সব ফরম্যাট | 100% থ্রেশহোল্ড</span>
+        </h1>
+        <p style="margin-top: 0.5rem; opacity: 0.9;">পেশাদার মানের কালার রিপ্লেসমেন্ট টুল - আসল সাইজ রিটেইন করে</p>
       </div>
-      <div class="control-panel-pro">
-        <div class="color-lab">
-          <span style="font-weight:700;">🎯 TARGET COLOR</span>
-          <input type="text" id="masterHex" class="hex-pro" value="#2C7DA0" maxlength="7">
-          <div id="masterSwatch" class="swatch-pro" style="background:#2C7DA0"></div>
+
+      <div class="control-panel">
+        <div class="color-section">
+          <div class="color-box">
+            <span>🎯 টার্গেট কালার</span>
+            <input type="text" id="targetHex" class="hex-input" value="#2C7DA0" maxlength="7">
+            <div id="colorSwatch" class="color-swatch" style="background: #2C7DA0"></div>
+          </div>
+
+          <div class="threshold-control">
+            <label>🎚️ থ্রেশহোল্ড (কালার ম্যাচিং সেনসিটিভিটি)</label>
+            <input type="range" id="thresholdSlider" min="0" max="100" value="100" step="1">
+            <span id="thresholdPercent" class="threshold-value">100%</span>
+            <small style="color: #64748b;">100% = সব কালার ফোর্সড চেঞ্জ</small>
+          </div>
+
+          <div class="mode-tabs">
+            <button class="mode-btn active" data-mode="recolor">✨ প্রো রিকালার</button>
+            <button class="mode-btn" data-mode="regenerate">🔮 অটো ট্রেস এইচডি</button>
+          </div>
         </div>
-        <div class="preset-palette" id="proPresetContainer"></div>
-        <div class="mode-tab" id="modeTabs">
-          <div class="mode-opt active" data-mode="recolor">✨ PRO RECOLOR</div>
-          <div class="mode-opt" data-mode="regenerate">🔮 AUTO TRACE HD</div>
+
+        <div class="preset-colors" id="presetContainer"></div>
+      </div>
+
+      <div class="upload-area">
+        <button id="uploadBtn" class="btn btn-primary">📂 ইমেজ আপলোড করুন</button>
+        <input type="file" id="fileInput" multiple accept="image/*" style="display: none">
+        <div class="stats" id="statsCount">📄 0টি ইমেজ</div>
+        <div class="stats" id="qualityStatus">✨ 4K সাপোর্ট | আসল সাইজে ডাউনলোড</div>
+      </div>
+
+      <div id="imageGrid" class="image-grid">
+        <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #64748b;">
+          ⬆️ PNG, JPG, JPEG, WebP, BMP - সব ফরম্যাট সাপোর্ট করে। আপলোড করুন।
         </div>
-        <button id="applyGlobalBtn" class="btn-pro btn-primary-pro">🔥 APPLY TO ALL (HQ)</button>
-        <button id="clearGlobalBtn" class="btn-pro btn-accent">🗑 REMOVE ALL</button>
       </div>
-      <div class="upload-pro">
-        <button id="uploadMainBtn" class="btn-pro btn-primary-pro">📂 UPLOAD PNG ICONS</button>
-        <input type="file" id="fileInputEl" multiple accept="image/png" style="display:none">
-        <div class="quality-badge" id="statsCount">📄 0 icons</div>
-        <div class="quality-badge" id="qualityStatus">✨ Pro: Smart upscale + flawless color replace</div>
-      </div>
-      <div id="fileGridPro" class="file-grid-pro">
-        <div style="width:100%; text-align:center; padding:40px; color:#6c869b;">⬆️ Upload PNG · Professional color
-          engine delivers 100% Photoshop-level results. Blurry icons → auto HD upscale.</div>
-      </div>
-      <div class="footer-pro">
-        <div>
-          <button id="batchZipPro" class="btn-pro btn-primary-pro">📦 ZIP (selected)</button>
-          <button id="refreshAllPro" class="btn-pro btn-accent">♻️ REFRESH PREVIEWS</button>
+
+      <div class="footer">
+        <div style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
+          <button id="applyAllBtn" class="btn btn-success">🔥 সবার ক্ষেত্রে প্রয়োগ করুন</button>
+          <button id="zipSelectedBtn" class="btn btn-primary">📦 জিপ (সিলেক্টেড)</button>
+          <button id="clearAllBtn" class="btn btn-warning">🗑 সব মুছুন</button>
         </div>
-        <div class="quality-badge">✔️ Select files → click ZIP or single download on each card. Auto upscale if blurry
-          detection.</div>
+        <div class="stats">✅ সিলেক্ট করুন → জিপ করুন | প্রতিটি কার্ড থেকে সিঙ্গেল ডাউনলোড</div>
       </div>
     </div>
   </div>
 
   <script>
     (function () {
-      // ---------- PROFESSIONAL STATE ----------
-      let fileItems = []; // { id, name, originalBlob, originalURL, hdBlob, hdURL, processedBlob, processedURL, selected }
+      // স্টেট ম্যানেজমেন্ট
+      let images = []; // { id, name, originalBlob, originalWidth, originalHeight, processedBlob, processedURL, selected }
       let nextId = 1;
-      let currentProMode = "recolor"; // recolor or regenerate
+      let currentMode = "recolor";
+      let currentThreshold = 100;
 
-      // DOM elements
-      const hexInput = document.getElementById('masterHex');
-      const swatch = document.getElementById('masterSwatch');
-      const uploadBtn = document.getElementById('uploadMainBtn');
-      const fileInput = document.getElementById('fileInputEl');
-      const gridContainer = document.getElementById('fileGridPro');
-      const statsSpan = document.getElementById('statsCount');
-      const applyAllBtn = document.getElementById('applyGlobalBtn');
-      const clearAllBtn = document.getElementById('clearGlobalBtn');
-      const batchZip = document.getElementById('batchZipPro');
-      const refreshAll = document.getElementById('refreshAllPro');
-      const modeRecolor = document.querySelector('[data-mode="recolor"]');
-      const modeRegenerate = document.querySelector('[data-mode="regenerate"]');
+      // DOM এলিমেন্টস
+      const hexInput = document.getElementById('targetHex');
+      const colorSwatch = document.getElementById('colorSwatch');
+      const thresholdSlider = document.getElementById('thresholdSlider');
+      const thresholdPercent = document.getElementById('thresholdPercent');
+      const uploadBtn = document.getElementById('uploadBtn');
+      const fileInput = document.getElementById('fileInput');
+      const imageGrid = document.getElementById('imageGrid');
+      const statsCount = document.getElementById('statsCount');
+      const applyAllBtn = document.getElementById('applyAllBtn');
+      const zipSelectedBtn = document.getElementById('zipSelectedBtn');
+      const clearAllBtn = document.getElementById('clearAllBtn');
+      const qualityStatus = document.getElementById('qualityStatus');
 
-      // ----- PRESET COLORS (provided by user, converted to clean hex) -----
-      const rawPresets = [
-        { bg: "rgb(22, 134, 208)", hex: "#1686D0" },
-        { bg: "rgb(0, 99, 120)", hex: "#006378" },
-        { bg: "rgb(0, 255, 98)", hex: "#00FF62" },
-        { bg: "rgb(6, 29, 46)", hex: "#061D2E" },
-        { bg: "rgb(10, 46, 57)", hex: "#0A2E39" },
-        { bg: "rgb(4, 28, 48)", hex: "#041C30" },
-        { bg: "rgb(255, 195, 0)", hex: "#FFC300" },
-        { bg: "rgb(255, 126, 41)", hex: "#FF7E29" },
-        { bg: "rgb(255, 92, 161)", hex: "#FF5CA1" },
-        { bg: "rgb(230, 133, 133)", hex: "#E68585" },
-        { bg: "rgb(118, 70, 255)", hex: "#7646FF" },
-        { bg: "rgb(0, 0, 0)", hex: "#000000" }
+      // প্রিসেট কালার (আপনার দেওয়া কালার)
+      const presetColors = [
+        { hex: "#1686D0", name: "নীল" },
+        { hex: "#006378", name: "গাঢ় নীল" },
+        { hex: "#00FF62", name: "সবুজ" },
+        { hex: "#061D2E", name: "ডার্ক নেভি" },
+        { hex: "#0A2E39", name: "টিল" },
+        { hex: "#041C30", name: "মিডনাইট" },
+        { hex: "#FFC300", name: "হলুদ" },
+        { hex: "#FF7E29", name: "কমলা" },
+        { hex: "#FF5CA1", name: "গোলাপি" },
+        { hex: "#E68585", name: "হালকা লাল" },
+        { hex: "#7646FF", name: "পারপল" },
+        { hex: "#000000", name: "কালো" },
+        { hex: "#FFFFFF", name: "সাদা" },
+        { hex: "#FF0000", name: "লাল" }
       ];
 
-      function buildPresetPro() {
-        const container = document.getElementById('proPresetContainer');
-        container.innerHTML = '';
-        rawPresets.forEach(p => {
-          const sw = document.createElement('div');
-          sw.className = 'preset-swatch';
-          sw.style.backgroundColor = p.bg;
-          sw.title = p.hex;
-          sw.addEventListener('click', () => {
-            hexInput.value = p.hex;
-            updateSwatchPro();
-          });
-          container.appendChild(sw);
-        });
-      }
-
+      // হেক্স নরমালাইজ
       function normalizeHex(hex) {
         let h = hex.trim();
         if (!h.startsWith('#')) h = '#' + h;
         if (/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(h)) {
-          if (h.length === 4) h = '#' + h[1] + h[1] + h[2] + h[2] + h[3] + h[3];
+          if (h.length === 4) {
+            h = '#' + h[1] + h[1] + h[2] + h[2] + h[3] + h[3];
+          }
           return h.toUpperCase();
         }
         return null;
       }
-      function updateSwatchPro() {
-        let valid = normalizeHex(hexInput.value);
-        swatch.style.backgroundColor = valid || "#CCCCCC";
-      }
-      hexInput.addEventListener('input', updateSwatchPro);
-      swatch.addEventListener('click', () => {
-        let pick = document.createElement('input');
-        pick.type = 'color';
-        pick.value = normalizeHex(hexInput.value) || "#2C7DA0";
-        pick.addEventListener('input', (e) => { hexInput.value = e.target.value; updateSwatchPro(); });
-        pick.click();
-      });
-      updateSwatchPro();
 
-      // ---------- SMART UPSCALE (if image is small / blurry) → enhance to HD (2x or 3x) using high-quality interpolation ----------
-      async function smartUpscaleToHD(blob, minSize = 512) {
-        return new Promise((resolve) => {
-          const img = new Image();
-          const url = URL.createObjectURL(blob);
-          img.onload = () => {
-            let width = img.width;
-            let height = img.height;
-            let scale = 1;
-            if (width < minSize && height < minSize) {
-              scale = Math.max(2, Math.ceil(minSize / Math.min(width, height)));
-              scale = Math.min(scale, 4); // max 4x upscale
-            } else if (width < 300 || height < 300) {
-              scale = 2;
-            }
-            const newWidth = width * scale;
-            const newHeight = height * scale;
-            const canvas = document.createElement('canvas');
-            canvas.width = newWidth;
-            canvas.height = newHeight;
-            const ctx = canvas.getContext('2d');
-            ctx.imageSmoothingEnabled = true;
-            ctx.imageSmoothingQuality = 'high';
-            ctx.drawImage(img, 0, 0, newWidth, newHeight);
-            canvas.toBlob(upscaledBlob => {
-              URL.revokeObjectURL(url);
-              resolve(upscaledBlob);
-            }, 'image/png');
-          };
-          img.onerror = () => { URL.revokeObjectURL(url); resolve(blob); };
-          img.src = url;
+      function updateSwatch() {
+        let valid = normalizeHex(hexInput.value);
+        if (valid) {
+          colorSwatch.style.backgroundColor = valid;
+        } else {
+          colorSwatch.style.backgroundColor = "#CCCCCC";
+        }
+      }
+
+      hexInput.addEventListener('input', updateSwatch);
+      colorSwatch.addEventListener('click', () => {
+        let picker = document.createElement('input');
+        picker.type = 'color';
+        picker.value = normalizeHex(hexInput.value) || "#2C7DA0";
+        picker.addEventListener('input', (e) => {
+          hexInput.value = e.target.value;
+          updateSwatch();
+        });
+        picker.click();
+      });
+      updateSwatch();
+
+      // থ্রেশহোল্ড স্লাইডার
+      thresholdSlider.addEventListener('input', (e) => {
+        currentThreshold = parseInt(e.target.value);
+        thresholdPercent.innerText = currentThreshold + '%';
+      });
+
+      // প্রিসেট বিল্ড
+      function buildPresets() {
+        const container = document.getElementById('presetContainer');
+        container.innerHTML = '';
+        presetColors.forEach(p => {
+          const swatch = document.createElement('div');
+          swatch.className = 'preset-item';
+          swatch.style.backgroundColor = p.hex;
+          swatch.title = p.name + ' ' + p.hex;
+          swatch.addEventListener('click', () => {
+            hexInput.value = p.hex;
+            updateSwatch();
+          });
+          container.appendChild(swatch);
         });
       }
+      buildPresets();
 
-      // ---------- PROFESSIONAL COLOR REPLACEMENT (Photoshop-level: dominant + secondary + edge antialiasing) ----------
-      function proColorReplace(imageData, targetRgb, options = { threshold: 48, preserveEdges: true }) {
+      // ফোর্সড কালার রিপ্লেসমেন্ট (থ্রেশহোল্ড 100% পর্যন্ত)
+      function forceColorReplace(imageData, targetRGB, threshold) {
         const data = imageData.data;
-        const w = imageData.width, h = imageData.height;
-        const pixels = [];
-        for (let i = 0; i < data.length; i += 4) {
-          if (data[i + 3] > 25) pixels.push({ r: data[i], g: data[i + 1], b: data[i + 2], idx: i });
-        }
-        if (pixels.length === 0) return false;
-        // Advanced dominant detection using weighted histogram
-        const colorMap = new Map();
-        for (let p of pixels) {
-          const key = `${Math.round(p.r / 4) * 4},${Math.round(p.g / 4) * 4},${Math.round(p.b / 4) * 4}`;
-          colorMap.set(key, (colorMap.get(key) || 0) + 1);
-        }
-        let maxC = 0; let dominant = { r: 100, g: 100, b: 100 };
-        for (let [key, cnt] of colorMap.entries()) {
-          if (cnt > maxC) {
-            maxC = cnt;
-            const parts = key.split(',').map(v => parseInt(v));
-            dominant = { r: parts[0] + 2, g: parts[1] + 2, b: parts[2] + 2 };
-          }
-        }
+        const width = imageData.width;
+        const height = imageData.height;
         let changed = false;
-        // Edge smoothing + full replacement
-        for (let p of pixels) {
-          const dr = p.r - dominant.r, dg = p.g - dominant.g, db = p.b - dominant.b;
-          const dist = Math.sqrt(dr * dr + dg * dg + db * db);
-          if (dist <= options.threshold) {
-            data[p.idx] = targetRgb.r;
-            data[p.idx + 1] = targetRgb.g;
-            data[p.idx + 2] = targetRgb.b;
-            changed = true;
+
+        // পুরো ইমেজের ডমিনেন্ট কালার বের করি
+        let colorSum = { r: 0, g: 0, b: 0, count: 0 };
+        for (let i = 0; i < data.length; i += 4) {
+          if (data[i + 3] > 10) {
+            colorSum.r += data[i];
+            colorSum.g += data[i + 1];
+            colorSum.b += data[i + 2];
+            colorSum.count++;
           }
         }
-        // optional second pass for color smoothing
-        if (changed) {
-          for (let y = 1; y < h - 1; y++) {
-            for (let x = 1; x < w - 1; x++) {
-              const idx = (y * w + x) * 4;
-              if (data[idx + 3] > 20) {
-                let rAcc = 0, gAcc = 0, bAcc = 0, cnt = 0;
-                for (let dy = -1; dy <= 1; dy++) {
-                  for (let dx = -1; dx <= 1; dx++) {
-                    const nidx = ((y + dy) * w + (x + dx)) * 4;
-                    if (data[nidx + 3] > 20) {
-                      rAcc += data[nidx];
-                      gAcc += data[nidx + 1];
-                      bAcc += data[nidx + 2];
-                      cnt++;
-                    }
-                  }
-                }
-                if (cnt > 0) {
-                  data[idx] = (data[idx] + rAcc / cnt) / 2;
-                  data[idx + 1] = (data[idx + 1] + gAcc / cnt) / 2;
-                  data[idx + 2] = (data[idx + 2] + bAcc / cnt) / 2;
-                }
-              }
+
+        let dominantColor = {
+          r: colorSum.count > 0 ? colorSum.r / colorSum.count : 128,
+          g: colorSum.count > 0 ? colorSum.g / colorSum.count : 128,
+          b: colorSum.count > 0 ? colorSum.b / colorSum.count : 128
+        };
+
+        // প্রতিটি পিক্সেল চেক করে বদলাই
+        for (let i = 0; i < data.length; i += 4) {
+          if (data[i + 3] > 10) { // আলফা থাকলেই কাজ করব
+            const dr = data[i] - dominantColor.r;
+            const dg = data[i + 1] - dominantColor.g;
+            const db = data[i + 2] - dominantColor.b;
+            const distance = Math.sqrt(dr * dr + dg * dg + db * db);
+            const maxDistance = Math.sqrt(255 * 255 * 3);
+            const similarity = (1 - (distance / maxDistance)) * 100;
+
+            // থ্রেশহোল্ড 100 মানে সব রং বদলাবে
+            if (similarity >= (100 - threshold) || threshold === 100) {
+              data[i] = targetRGB.r;
+              data[i + 1] = targetRGB.g;
+              data[i + 2] = targetRGB.b;
+              changed = true;
             }
           }
         }
+
         return changed;
       }
 
-      async function recolorProfessional(blob, targetHex, doUpscaleFirst = true) {
+      // ইমেজ প্রসেস - জুম করে কাজ করে, তারপর আসল সাইজে ফিরিয়ে আনে
+      async function processImage(blob, targetHex, mode, threshold, originalWidth, originalHeight) {
         return new Promise(async (resolve) => {
-          let workingBlob = blob;
-          if (doUpscaleFirst) {
-            workingBlob = await smartUpscaleToHD(blob, 512);
-          }
+          // প্রথমে প্রসেসিং এর জন্য জুম করব (বড় সাইজে কাজ করব)
           const img = new Image();
-          const url = URL.createObjectURL(workingBlob);
-          img.onload = () => {
-            const canvas = document.createElement('canvas');
-            canvas.width = img.width;
-            canvas.height = img.height;
-            const ctx = canvas.getContext('2d', { alpha: true });
-            ctx.imageSmoothingQuality = 'high';
-            ctx.drawImage(img, 0, 0);
-            const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            let validHex = normalizeHex(targetHex);
-            if (!validHex) validHex = "#AAAAAA";
-            const r = parseInt(validHex.slice(1, 3), 16);
-            const g = parseInt(validHex.slice(3, 5), 16);
-            const b = parseInt(validHex.slice(5, 7), 16);
-            proColorReplace(imgData, { r, g, b }, { threshold: 52 });
-            ctx.putImageData(imgData, 0, 0);
-            canvas.toBlob(resultBlob => {
-              URL.revokeObjectURL(url);
-              resolve(resultBlob);
-            }, 'image/png');
-          };
-          img.onerror = () => { URL.revokeObjectURL(url); resolve(blob); };
-          img.src = url;
-        });
-      }
+          const url = URL.createObjectURL(blob);
 
-      // ---------- AUTO TRACE PRO (vector-like regeneration with HD output) ----------
-      async function autoTraceProRegenerate(blob, targetHex) {
-        return new Promise(async (resolve) => {
-          const upscaledBlob = await smartUpscaleToHD(blob, 600);
-          const img = new Image();
-          const url = URL.createObjectURL(upscaledBlob);
-          img.onload = () => {
-            const w = img.width, h = img.height;
-            const canvas = document.createElement('canvas');
-            canvas.width = w; canvas.height = h;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0);
-            const imgData = ctx.getImageData(0, 0, w, h);
-            const data = imgData.data;
-            // extract shape alpha
-            let minX = w, minY = h, maxX = 0, maxY = 0;
-            for (let y = 0; y < h; y++) {
-              for (let x = 0; x < w; x++) {
-                const idx = (y * w + x) * 4;
-                if (data[idx + 3] > 30) {
-                  minX = Math.min(minX, x);
-                  minY = Math.min(minY, y);
-                  maxX = Math.max(maxX, x);
-                  maxY = Math.max(maxY, y);
-                }
-              }
-            }
-            if (minX > maxX) { resolve(upscaledBlob); return; }
-            const pad = Math.max(8, Math.min(40, (maxX - minX) * 0.1));
-            const cropX = Math.max(0, minX - pad);
-            const cropY = Math.max(0, minY - pad);
-            const cropW = Math.min(w - cropX, (maxX - minX) + pad * 2);
-            const cropH = Math.min(h - cropY, (maxY - minY) + pad * 2);
-            const extractCanvas = document.createElement('canvas');
-            extractCanvas.width = cropW; extractCanvas.height = cropH;
-            const extCtx = extractCanvas.getContext('2d');
-            extCtx.drawImage(img, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
-            const extractData = extCtx.getImageData(0, 0, cropW, cropH);
-            const eData = extractData.data;
-            const shapeMask = new Uint8Array(cropW * cropH);
-            for (let i = 0; i < cropW * cropH; i++) shapeMask[i] = eData[i * 4 + 3] > 30 ? 255 : 0;
-            const finalCanvas = document.createElement('canvas');
-            finalCanvas.width = cropW; finalCanvas.height = cropH;
-            const fCtx = finalCanvas.getContext('2d');
-            const outData = fCtx.createImageData(cropW, cropH);
-            const outArr = outData.data;
+          img.onload = async () => {
+            const processingWidth = Math.max(img.width, 1024); // কমপক্ষে 1024px এ কাজ করব
+            const processingHeight = Math.floor((processingWidth / img.width) * img.height);
+
+            // প্রসেসিং ক্যানভাস (বড় সাইজ)
+            const processCanvas = document.createElement('canvas');
+            processCanvas.width = processingWidth;
+            processCanvas.height = processingHeight;
+            const processCtx = processCanvas.getContext('2d', { alpha: true });
+            processCtx.imageSmoothingQuality = 'high';
+            processCtx.drawImage(img, 0, 0, processingWidth, processingHeight);
+
+            let processData = processCtx.getImageData(0, 0, processingWidth, processingHeight);
+
             const validHex = normalizeHex(targetHex);
-            const tr = parseInt(validHex.slice(1, 3), 16);
-            const tg = parseInt(validHex.slice(3, 5), 16);
-            const tb = parseInt(validHex.slice(5, 7), 16);
-            const smoothMask = new Float32Array(cropW * cropH);
-            for (let y = 0; y < cropH; y++) {
-              for (let x = 0; x < cropW; x++) {
-                let idx = y * cropW + x;
-                let val = shapeMask[idx] / 255;
-                if (val > 0) {
-                  let sum = 0, cnt = 0;
-                  for (let dy = -1; dy <= 1; dy++) {
-                    for (let dx = -1; dx <= 1; dx++) {
-                      let nx = x + dx, ny = y + dy;
-                      if (nx >= 0 && nx < cropW && ny >= 0 && ny < cropH) {
-                        sum += shapeMask[ny * cropW + nx] / 255;
-                        cnt++;
+            const targetRGB = {
+              r: parseInt(validHex.slice(1, 3), 16),
+              g: parseInt(validHex.slice(3, 5), 16),
+              b: parseInt(validHex.slice(5, 7), 16)
+            };
+
+            if (mode === "recolor") {
+              forceColorReplace(processData, targetRGB, threshold);
+            } else {
+              // রিজেনারেট মোড - এজ স্মুথ করে
+              forceColorReplace(processData, targetRGB, threshold);
+              // স্মুথিং পাস
+              const data = processData.data;
+              const w = processData.width;
+              const h = processData.height;
+              for (let y = 1; y < h - 1; y++) {
+                for (let x = 1; x < w - 1; x++) {
+                  const idx = (y * w + x) * 4;
+                  if (data[idx + 3] > 20) {
+                    let rSum = 0, gSum = 0, bSum = 0, cnt = 0;
+                    for (let dy = -1; dy <= 1; dy++) {
+                      for (let dx = -1; dx <= 1; dx++) {
+                        const nidx = ((y + dy) * w + (x + dx)) * 4;
+                        if (data[nidx + 3] > 20) {
+                          rSum += data[nidx];
+                          gSum += data[nidx + 1];
+                          bSum += data[nidx + 2];
+                          cnt++;
+                        }
                       }
                     }
-                  }
-                  smoothMask[idx] = Math.min(1.0, sum / cnt);
-                } else {
-                  let sum = 0, cnt = 0;
-                  for (let dy = -1; dy <= 1; dy++) {
-                    for (let dx = -1; dx <= 1; dx++) {
-                      let nx = x + dx, ny = y + dy;
-                      if (nx >= 0 && nx < cropW && ny >= 0 && ny < cropH) {
-                        sum += shapeMask[ny * cropW + nx] / 255;
-                        cnt++;
-                      }
+                    if (cnt > 0) {
+                      data[idx] = (data[idx] + rSum / cnt) / 2;
+                      data[idx + 1] = (data[idx + 1] + gSum / cnt) / 2;
+                      data[idx + 2] = (data[idx + 2] + bSum / cnt) / 2;
                     }
                   }
-                  smoothMask[idx] = (sum / cnt) * 0.85;
                 }
               }
+              processCtx.putImageData(processData, 0, 0);
             }
-            for (let i = 0; i < cropW * cropH; i++) {
-              let alpha = Math.min(255, Math.floor(smoothMask[i] * 255));
-              if (alpha > 3) {
-                outArr[i * 4] = tr;
-                outArr[i * 4 + 1] = tg;
-                outArr[i * 4 + 2] = tb;
-                outArr[i * 4 + 3] = alpha;
-              }
-            }
-            fCtx.putImageData(outData, 0, 0);
+
+            processCtx.putImageData(processData, 0, 0);
+
+            // এখন আসল সাইজে ফিরিয়ে আনব
+            const finalCanvas = document.createElement('canvas');
+            finalCanvas.width = originalWidth;
+            finalCanvas.height = originalHeight;
+            const finalCtx = finalCanvas.getContext('2d', { alpha: true });
+            finalCtx.imageSmoothingQuality = 'high';
+            finalCtx.drawImage(processCanvas, 0, 0, processingWidth, processingHeight, 0, 0, originalWidth, originalHeight);
+
             finalCanvas.toBlob(resultBlob => {
               URL.revokeObjectURL(url);
               resolve(resultBlob);
             }, 'image/png');
           };
-          img.onerror = () => { URL.revokeObjectURL(url); resolve(blob); };
+
+          img.onerror = () => {
+            URL.revokeObjectURL(url);
+            resolve(blob);
+          };
           img.src = url;
         });
       }
 
-      // ---------- process each file with current mode, auto upscale & pro quality ----------
-      async function processFileByMode(item, targetHex, mode) {
+      // ইমেজ প্রসেস করে ফাইল স্টোর আপডেট
+      async function processSingleImage(item, forceRefresh = false) {
         if (!item.originalBlob) return false;
         try {
-          let finalBlob;
-          if (mode === "recolor") {
-            finalBlob = await recolorProfessional(item.originalBlob, targetHex, true);
-          } else {
-            finalBlob = await autoTraceProRegenerate(item.originalBlob, targetHex);
-          }
+          const processed = await processImage(
+            item.originalBlob,
+            hexInput.value,
+            currentMode,
+            currentThreshold,
+            item.originalWidth,
+            item.originalHeight
+          );
+
           if (item.processedURL) URL.revokeObjectURL(item.processedURL);
-          item.processedBlob = finalBlob;
-          item.processedURL = URL.createObjectURL(finalBlob);
+          item.processedBlob = processed;
+          item.processedURL = URL.createObjectURL(processed);
           return true;
-        } catch (e) { console.warn(e); return false; }
+        } catch (e) {
+          console.error('প্রসেসিং এ সমস্যা:', e);
+          return false;
+        }
       }
 
-      async function applyToAllFiles() {
-        let hex = hexInput.value;
-        let validHex = normalizeHex(hex);
-        if (!validHex) { alert("Please enter valid HEX (e.g., #2C7DA0)"); return false; }
-        for (let item of fileItems) {
-          await processFileByMode(item, validHex, currentProMode);
+      // সব ইমেজে অ্যাপ্লাই
+      async function applyToAll() {
+        qualityStatus.innerHTML = '⏳ প্রসেসিং চলছে... দয়া করে অপেক্ষা করুন';
+        for (let item of images) {
+          await processSingleImage(item);
         }
         renderGallery();
-        return true;
+        qualityStatus.innerHTML = '✅ প্রসেসিং সম্পূর্ণ | আসল সাইজ রিটেইন করা হয়েছে';
+        setTimeout(() => {
+          qualityStatus.innerHTML = '✨ 4K সাপোর্ট | আসল সাইজে ডাউনলোড | 100% থ্রেশহোল্ড';
+        }, 3000);
       }
 
+      // ইমেজ সাইজ পাওয়া
+      function getImageSize(blob) {
+        return new Promise((resolve) => {
+          const img = new Image();
+          const url = URL.createObjectURL(blob);
+          img.onload = () => {
+            URL.revokeObjectURL(url);
+            resolve({ width: img.width, height: img.height });
+          };
+          img.onerror = () => resolve({ width: 100, height: 100 });
+          img.src = url;
+        });
+      }
+
+      // ফাইল অ্যাড
       async function addFiles(files) {
         for (let file of files) {
-          if (!file.type.includes('png')) { alert(`Skip ${file.name} (PNG only)`); continue; }
           const id = nextId++;
           const originalBlob = file.slice(0, file.size, file.type);
           const originalURL = URL.createObjectURL(originalBlob);
-          const newItem = {
-            id, name: file.name,
-            originalBlob, originalURL,
+          const size = await getImageSize(originalBlob);
+
+          const newImage = {
+            id: id,
+            name: file.name,
+            originalBlob: originalBlob,
+            originalURL: originalURL,
+            originalWidth: size.width,
+            originalHeight: size.height,
             processedBlob: originalBlob,
             processedURL: originalURL,
-            selected: true,
+            selected: true
           };
-          fileItems.push(newItem);
+
+          images.push(newImage);
         }
         renderGallery();
         updateStats();
       }
 
+      // গ্যালারি রেন্ডার
       function renderGallery() {
-        if (fileItems.length === 0) {
-          gridContainer.innerHTML = `<div style="width:100%; text-align:center; padding:40px; color:#6c869b;">✨ Upload PNG icons. Professional recolor delivers Photoshop quality + HD upscale for blurry images.</div>`;
-          statsSpan.innerText = `📄 0 icons`;
+        if (images.length === 0) {
+          imageGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #64748b;">
+            ⬆️ PNG, JPG, JPEG, WebP, BMP - সব ফরম্যাট সাপোর্ট করে। 4K ইমেজও প্রসেস করতে পারে।
+          </div>`;
           return;
         }
+
         let html = '';
-        let anySel = false, allSel = true;
-        for (let it of fileItems) {
-          if (it.selected) anySel = true; else allSel = false;
-          const preview = it.processedURL || it.originalURL;
-          const modeLabel = currentProMode === 'recolor' ? 'Pro Recolor' : 'Trace HD';
+        for (let img of images) {
+          const preview = img.processedURL || img.originalURL;
           html += `
-                    <div class="icon-card" data-id="${it.id}">
-                        <img src="${preview}" alt="icon" style="width:110px;height:110px;">
-                        <div style="font-size:0.7rem; font-weight:600; margin:8px 0;">${escapeHtml(shortName(it.name))}</div>
-                        <div style="font-size:9px; color:#156b42;">${modeLabel}</div>
-                        <div style="margin:6px 0;"><label><input type="checkbox" class="select-item" data-id="${it.id}" ${it.selected ? 'checked' : ''}> Select</label></div>
-                        <div style="display:flex; gap:8px; justify-content:center; margin-top:6px;">
-                            <button class="single-dl-pro" data-id="${it.id}" style="background:#156b42; border:none; border-radius:30px; padding:4px 12px; color:white; font-size:11px; cursor:pointer;">⬇ Single</button>
-                            <button class="remove-item-pro" data-id="${it.id}" style="background:#e2e8f0; border:none; border-radius:30px; padding:4px 12px; cursor:pointer;">✕</button>
-                        </div>
-                    </div>
-                `;
+            <div class="image-card" data-id="${img.id}">
+              <img src="${preview}" alt="${escapeHtml(img.name)}" loading="lazy">
+              <div style="font-size: 0.7rem; font-weight: 600; margin: 0.5rem 0;">${shortName(img.name)}</div>
+              <div style="font-size: 0.65rem; color: #15803d;">${img.originalWidth}x${img.originalHeight}</div>
+              <label style="display: flex; align-items: center; justify-content: center; gap: 0.3rem; margin: 0.5rem 0;">
+                <input type="checkbox" class="select-checkbox" data-id="${img.id}" ${img.selected ? 'checked' : ''}>
+                <span style="font-size: 0.7rem;">সিলেক্ট</span>
+              </label>
+              <div class="card-actions">
+                <button class="btn-small" style="background: #15803d; color: white;" onclick="window.downloadSingle(${img.id})">⬇ ডাউনলোড</button>
+                <button class="btn-small" style="background: #dc2626; color: white;" onclick="window.removeImage(${img.id})">🗑 মুছুন</button>
+              </div>
+            </div>
+          `;
         }
-        gridContainer.innerHTML = html;
-        statsSpan.innerText = `📄 ${fileItems.length} icons | ${fileItems.filter(f => f.selected).length} selected`;
-        // bind events
-        document.querySelectorAll('.select-item').forEach(cb => {
-          cb.addEventListener('change', (e) => {
-            let id = parseInt(cb.dataset.id);
-            let it = fileItems.find(i => i.id === id);
-            if (it) it.selected = cb.checked;
-            updateStats();
-          });
-        });
-        document.querySelectorAll('.single-dl-pro').forEach(btn => {
-          btn.addEventListener('click', async (e) => {
-            let id = parseInt(btn.dataset.id);
-            let it = fileItems.find(i => i.id === id);
-            if (it) await downloadSinglePro(it);
-          });
-        });
-        document.querySelectorAll('.remove-item-pro').forEach(btn => {
-          btn.addEventListener('click', (e) => {
-            let id = parseInt(btn.dataset.id);
-            removeById(id);
-          });
-        });
-      }
-
-      async function downloadSinglePro(item) {
-        let validHex = normalizeHex(hexInput.value);
-        if (!validHex) { alert("Enter valid hex"); return; }
-        await processFileByMode(item, validHex, currentProMode);
-        const suffix = currentProMode === 'recolor' ? 'procolor' : 'protrace';
-        const filename = item.name.replace(/\.png$/i, `_${suffix}_${validHex.slice(1)}.png`);
-        saveAs(item.processedBlob, filename);
-        renderGallery();
-      }
-
-      async function batchZipSelected() {
-        let selected = fileItems.filter(f => f.selected);
-        if (selected.length === 0) { alert("Select files first"); return; }
-        let validHex = normalizeHex(hexInput.value);
-        if (!validHex) { alert("Invalid HEX"); return; }
-        const zip = new JSZip();
-        for (let item of selected) {
-          await processFileByMode(item, validHex, currentProMode);
-          const base = item.name.replace(/\.png$/i, '');
-          const suffix = currentProMode === 'recolor' ? 'pro' : 'tracehd';
-          zip.file(`${base}_${suffix}_${validHex.slice(1)}.png`, item.processedBlob);
-        }
-        const zipBlob = await zip.generateAsync({ type: "blob" });
-        saveAs(zipBlob, `icons_${currentProMode}_${Date.now()}.zip`);
-        renderGallery();
-      }
-
-      function removeById(id) {
-        const idx = fileItems.findIndex(i => i.id === id);
-        if (idx !== -1) {
-          const it = fileItems[idx];
-          if (it.originalURL) URL.revokeObjectURL(it.originalURL);
-          if (it.processedURL && it.processedURL !== it.originalURL) URL.revokeObjectURL(it.processedURL);
-          fileItems.splice(idx, 1);
-          renderGallery();
-          updateStats();
-        }
-      }
-      function clearAll() {
-        for (let it of fileItems) {
-          if (it.originalURL) URL.revokeObjectURL(it.originalURL);
-          if (it.processedURL && it.processedURL !== it.originalURL) URL.revokeObjectURL(it.processedURL);
-        }
-        fileItems = [];
-        renderGallery();
+        imageGrid.innerHTML = html;
         updateStats();
       }
+
       function updateStats() {
-        statsSpan.innerText = `📄 ${fileItems.length} icons | ${fileItems.filter(f => f.selected).length} selected`;
+        const selectedCount = images.filter(i => i.selected).length;
+        statsCount.innerHTML = `📄 ${images.length}টি ইমেজ | ${selectedCount}টি সিলেক্টেড`;
       }
-      function setMode(mode) {
-        currentProMode = mode;
-        if (mode === 'recolor') {
-          modeRecolor.classList.add('active');
-          modeRegenerate.classList.remove('active');
-          document.getElementById('qualityStatus').innerHTML = '🎨 Pro Recolor: Smart upscale + Photoshop-level color match';
-        } else {
-          modeRegenerate.classList.add('active');
-          modeRecolor.classList.remove('active');
-          document.getElementById('qualityStatus').innerHTML = '🔮 Auto Trace HD: Vector-like regeneration + crisp edges';
+
+      // সিঙ্গেল ডাউনলোড
+      window.downloadSingle = async function (id) {
+        const item = images.find(i => i.id === id);
+        if (item) {
+          qualityStatus.innerHTML = '⏳ প্রসেসিং একক ইমেজ...';
+          await processSingleImage(item);
+          const suffix = currentMode === 'recolor' ? 'recolor' : 'trace';
+          const hexVal = normalizeHex(hexInput.value).replace('#', '');
+          const filename = item.name.replace(/\.[^/.]+$/, '') + `_${suffix}_${hexVal}.png`;
+          saveAs(item.processedBlob, filename);
+          renderGallery();
+          qualityStatus.innerHTML = '✅ ডাউনলোড সম্পূর্ণ | আসল সাইজ রিটেইন হয়েছে';
+          setTimeout(() => {
+            qualityStatus.innerHTML = '✨ 4K সাপোর্ট | আসল সাইজে ডাউনলোড | 100% থ্রেশহোল্ড';
+          }, 2000);
         }
+      };
+
+      window.removeImage = function (id) {
+        const index = images.findIndex(i => i.id === id);
+        if (index !== -1) {
+          const img = images[index];
+          if (img.originalURL) URL.revokeObjectURL(img.originalURL);
+          if (img.processedURL && img.processedURL !== img.originalURL) URL.revokeObjectURL(img.processedURL);
+          images.splice(index, 1);
+          renderGallery();
+        }
+      };
+
+      // জিপ সিলেক্টেড
+      async function zipSelected() {
+        const selected = images.filter(i => i.selected);
+        if (selected.length === 0) {
+          alert('প্লিজ কিছু ইমেজ সিলেক্ট করুন');
+          return;
+        }
+
+        qualityStatus.innerHTML = '⏳ জিপ তৈরি হচ্ছে...';
+        const zip = new JSZip();
+
+        for (let item of selected) {
+          await processSingleImage(item);
+          const hexVal = normalizeHex(hexInput.value).replace('#', '');
+          const suffix = currentMode === 'recolor' ? 'recolor' : 'trace';
+          const filename = item.name.replace(/\.[^/.]+$/, '') + `_${suffix}_${hexVal}.png`;
+          zip.file(filename, item.processedBlob);
+        }
+
+        const zipBlob = await zip.generateAsync({ type: "blob" });
+        saveAs(zipBlob, `icons_${currentMode}_${Date.now()}.zip`);
+        qualityStatus.innerHTML = '✅ জিপ তৈরি সম্পূর্ণ!';
+        setTimeout(() => {
+          qualityStatus.innerHTML = '✨ 4K সাপোর্ট | আসল সাইজে ডাউনলোড | 100% থ্রেশহোল্ড';
+        }, 2000);
+      }
+
+      function clearAll() {
+        for (let img of images) {
+          if (img.originalURL) URL.revokeObjectURL(img.originalURL);
+          if (img.processedURL && img.processedURL !== img.originalURL) URL.revokeObjectURL(img.processedURL);
+        }
+        images = [];
         renderGallery();
       }
 
-      function escapeHtml(str) { return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m])); }
-      function shortName(s) { return s.length > 26 ? s.slice(0, 22) + '...' : s; }
+      // মোড চেঞ্জ
+      function setMode(mode) {
+        currentMode = mode;
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+          if (btn.dataset.mode === mode) {
+            btn.classList.add('active');
+          } else {
+            btn.classList.remove('active');
+          }
+        });
+        qualityStatus.innerHTML = mode === 'recolor' ?
+          '🎨 প্রো রিকালার মোড: 100% থ্রেশহোল্ডে সব রং বদলাবে' :
+          '🔮 অটো ট্রেস মোড: এজ স্মুথ + রিকালার';
+      }
 
-      // event binding
+      // ইভেন্ট লিসেনার
+      document.querySelectorAll('.mode-btn').forEach(btn => {
+        btn.addEventListener('click', () => setMode(btn.dataset.mode));
+      });
+
       uploadBtn.addEventListener('click', () => fileInput.click());
-      fileInput.addEventListener('change', (e) => { if (e.target.files.length) addFiles(Array.from(e.target.files)); fileInput.value = ''; });
-      applyAllBtn.addEventListener('click', applyToAllFiles);
-      clearAllBtn.addEventListener('click', clearAll);
-      batchZip.addEventListener('click', batchZipSelected);
-      refreshAll.addEventListener('click', applyToAllFiles);
-      modeRecolor.addEventListener('click', () => setMode('recolor'));
-      modeRegenerate.addEventListener('click', () => setMode('regenerate'));
+      fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length) {
+          addFiles(Array.from(e.target.files));
+        }
+        fileInput.value = '';
+      });
 
-      buildPresetPro();
+      applyAllBtn.addEventListener('click', applyToAll);
+      zipSelectedBtn.addEventListener('click', zipSelected);
+      clearAllBtn.addEventListener('click', clearAll);
+
+      // ইমেজ সিলেক্টের জন্য ডেলিগেশন
+      document.addEventListener('change', (e) => {
+        if (e.target.classList && e.target.classList.contains('select-checkbox')) {
+          const id = parseInt(e.target.dataset.id);
+          const img = images.find(i => i.id === id);
+          if (img) img.selected = e.target.checked;
+          updateStats();
+        }
+      });
+
+      function escapeHtml(str) {
+        return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
+      }
+
+      function shortName(s) {
+        return s.length > 25 ? s.slice(0, 22) + '...' : s;
+      }
+
       setMode('recolor');
-      updateSwatchPro();
     })();
   </script>
 </body>
