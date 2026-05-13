@@ -4,115 +4,193 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>Pro Icon Forge | পেশাদার কালার রিপ্লেসমেন্ট + 4K সাপোর্ট</title>
+  <title>Pro Icon Forge Pro Max | পেশাদার কালার রিপ্লেসমেন্ট স্টুডিও</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Segoe UI', system-ui, -apple-system, 'Roboto', sans-serif;
+      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
     }
 
     body {
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      background: linear-gradient(145deg, #0a0e27 0%, #1a1f3a 100%);
       min-height: 100vh;
-      padding: 1rem;
+      padding: 1.5rem;
+      position: relative;
     }
 
-    .container {
-      max-width: 1400px;
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at 20% 50%, rgba(15, 52, 96, 0.3) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .pro-container {
+      max-width: 1600px;
       margin: 0 auto;
+      position: relative;
+      z-index: 1;
     }
 
-    /* প্রফেশনাল কার্ড ডিজাইন */
-    .main-card {
+    /* গ্লাসমরফিক কার্ড */
+    .pro-card {
       background: rgba(255, 255, 255, 0.98);
-      border-radius: 1.5rem;
+      backdrop-filter: blur(0px);
+      border-radius: 2rem;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
       overflow: hidden;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(2px);
+      transition: all 0.3s;
     }
 
     /* হেডার */
-    .header {
-      background: linear-gradient(135deg, #0f3460 0%, #1a4a6f 100%);
-      padding: 1.5rem 2rem;
+    .pro-header {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      padding: 1.8rem 2rem;
       color: white;
+      position: relative;
+      overflow: hidden;
     }
 
-    .header h1 {
+    .pro-header::before {
+      content: '✨';
+      position: absolute;
+      right: -20px;
+      top: -20px;
+      font-size: 120px;
+      opacity: 0.05;
+      pointer-events: none;
+    }
+
+    .pro-header h1 {
       font-size: 1.8rem;
-      font-weight: 700;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff, #94a3b8);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
       display: flex;
       align-items: center;
       gap: 0.8rem;
       flex-wrap: wrap;
     }
 
-    .badge {
-      background: rgba(255, 255, 255, 0.2);
-      padding: 0.3rem 1rem;
+    .pro-badge {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      padding: 0.4rem 1rem;
       border-radius: 40px;
-      font-size: 0.75rem;
-      font-weight: 500;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
     }
 
-    /* কন্ট্রোল প্যানেল */
-    .control-panel {
-      padding: 1.5rem;
-      background: #f8fafc;
+    /* অল-ইন-ওয়ান কন্ট্রোল বার */
+    .control-strip {
+      background: #ffffff;
+      padding: 1.2rem 2rem;
       border-bottom: 1px solid #e2e8f0;
-    }
-
-    .color-section {
       display: flex;
       flex-wrap: wrap;
       gap: 1rem;
       align-items: center;
-      margin-bottom: 1.5rem;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 
-    .color-box {
+    .control-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    /* প্রিমিয়াম বাটন */
+    .premium-btn {
+      padding: 0.7rem 1.5rem;
+      border-radius: 60px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.85rem;
+    }
+
+    .premium-btn-primary {
+      background: linear-gradient(135deg, #0f3460, #1e4a6e);
+      color: white;
+      box-shadow: 0 4px 12px rgba(15, 52, 96, 0.3);
+    }
+
+    .premium-btn-success {
+      background: linear-gradient(135deg, #15803d, #166534);
+      color: white;
+    }
+
+    .premium-btn-danger {
+      background: linear-gradient(135deg, #b91c1c, #7f1d1d);
+      color: white;
+    }
+
+    .premium-btn-warning {
+      background: linear-gradient(135deg, #d97706, #b45309);
+      color: white;
+    }
+
+    .premium-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    /* কালার কন্ট্রোল */
+    .color-control {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      background: white;
-      padding: 0.5rem 1.5rem;
+      gap: 0.8rem;
+      background: #f8fafc;
+      padding: 0.4rem 1.2rem;
       border-radius: 60px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e2e8f0;
     }
 
-    .hex-input {
-      border: 2px solid #e2e8f0;
+    .hex-field {
+      border: 1px solid #cbd5e1;
       border-radius: 40px;
-      padding: 0.6rem 1rem;
+      padding: 0.5rem 1rem;
       font-family: monospace;
       font-weight: 700;
-      font-size: 1rem;
-      width: 130px;
+      width: 120px;
       text-align: center;
+      font-size: 0.85rem;
     }
 
-    .color-swatch {
-      width: 45px;
-      height: 45px;
+    .swatch-field {
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
       cursor: pointer;
-      border: 3px solid white;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-      transition: transform 0.2s;
-    }
-
-    .color-swatch:hover {
-      transform: scale(1.05);
+      border: 2px solid white;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
     }
 
     /* থ্রেশহোল্ড স্লাইডার */
-    .threshold-control {
-      background: white;
-      padding: 0.8rem 1.5rem;
+    .threshold-wrap {
+      background: #f8fafc;
+      padding: 0.4rem 1.2rem;
       border-radius: 60px;
       display: flex;
       align-items: center;
@@ -120,582 +198,418 @@
       flex-wrap: wrap;
     }
 
-    .threshold-control label {
-      font-weight: 600;
-      color: #1e293b;
-    }
-
-    input[type="range"] {
-      width: 200px;
+    .threshold-wrap input {
+      width: 160px;
       height: 5px;
       border-radius: 5px;
       background: #cbd5e1;
     }
 
-    .threshold-value {
+    .threshold-val {
       background: #0f3460;
       color: white;
       padding: 0.2rem 0.8rem;
       border-radius: 40px;
       font-weight: 700;
-      min-width: 60px;
-      text-align: center;
+      font-size: 0.8rem;
     }
 
-    /* মোড ট্যাব */
-    .mode-tabs {
+    /* প্রিসেট প্যালেট */
+    .preset-strip {
+      background: #f1f5f9;
+      padding: 0.8rem 2rem;
       display: flex;
-      gap: 0.5rem;
-      background: #e2e8f0;
-      padding: 0.3rem;
-      border-radius: 60px;
+      gap: 0.8rem;
       flex-wrap: wrap;
+      border-bottom: 1px solid #e2e8f0;
     }
 
-    .mode-btn {
-      padding: 0.6rem 1.5rem;
-      border-radius: 60px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.2s;
-      border: none;
-      background: transparent;
-    }
-
-    .mode-btn.active {
-      background: #0f3460;
-      color: white;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    }
-
-    /* প্রিসেট কালার */
-    .preset-colors {
-      display: flex;
-      gap: 0.6rem;
-      flex-wrap: wrap;
-      align-items: center;
-      margin-top: 1rem;
-    }
-
-    .preset-item {
-      width: 40px;
-      height: 40px;
+    .preset-dot {
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       cursor: pointer;
-      transition: transform 0.1s;
+      transition: all 0.15s;
       border: 2px solid white;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
-    .preset-item:hover {
+    .preset-dot:hover {
       transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
     /* আপলোড এরিয়া */
-    .upload-area {
-      padding: 1.5rem;
-      background: #f1f5f9;
+    .upload-strip {
+      background: #fef3c7;
+      padding: 1rem 2rem;
       display: flex;
       flex-wrap: wrap;
       gap: 1rem;
       align-items: center;
-      justify-content: space-between;
+      border-bottom: 1px solid #fde68a;
     }
 
-    .btn {
-      border: none;
-      padding: 0.7rem 1.8rem;
-      border-radius: 60px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-size: 0.9rem;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, #0f3460, #1e4a6e);
-      color: white;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    .btn-success {
-      background: #15803d;
-      color: white;
-    }
-
-    .btn-warning {
-      background: #b91c1c;
-      color: white;
-    }
-
-    .stats {
-      background: white;
-      padding: 0.4rem 1rem;
-      border-radius: 60px;
-      font-size: 0.8rem;
-      font-weight: 600;
-    }
-
-    /* গ্রিড ভিউ - রেসপন্সিভ */
-    .image-grid {
-      padding: 1.5rem;
+    /* গ্রিড লেআউট - প্রিমিয়াম */
+    .premium-grid {
+      padding: 2rem;
       max-height: 550px;
       overflow-y: auto;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1.2rem;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 1.5rem;
+      background: #fafcff;
     }
 
-    .image-card {
+    /* আইকন কার্ড */
+    .icon-card-pro {
       background: white;
-      border-radius: 1rem;
-      padding: 1rem;
+      border-radius: 1.2rem;
+      padding: 1.2rem;
       text-align: center;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      transition: all 0.2s;
-      border: 1px solid #e2e8f0;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(15, 52, 96, 0.1);
+      position: relative;
+      overflow: hidden;
     }
 
-    .image-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    .icon-card-pro:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.2);
+      border-color: #0f3460;
     }
 
-    .image-card img {
-      width: 110px;
-      height: 110px;
+    .card-image {
+      width: 120px;
+      height: 120px;
       object-fit: contain;
-      border-radius: 12px;
+      margin: 0 auto;
+      border-radius: 16px;
       background: #f8fafc;
+      padding: 0.5rem;
+    }
+
+    .card-name {
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin: 0.8rem 0;
+      color: #1e293b;
+      word-break: break-word;
+    }
+
+    .card-size {
+      font-size: 0.65rem;
+      color: #64748b;
+      margin-bottom: 0.8rem;
     }
 
     .card-actions {
       display: flex;
-      gap: 0.5rem;
       justify-content: center;
-      margin-top: 0.8rem;
-      flex-wrap: wrap;
+      gap: 0.6rem;
     }
 
-    .btn-small {
-      padding: 0.3rem 0.8rem;
-      font-size: 0.7rem;
-      border-radius: 40px;
+    .mini-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
       border: none;
       cursor: pointer;
-      font-weight: 600;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #f1f5f9;
+      color: #1e293b;
+    }
+
+    .mini-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .mini-download {
+      background: #0f3460;
+      color: white;
+    }
+
+    .mini-delete {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .card-check {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      width: 22px;
+      height: 22px;
+      cursor: pointer;
     }
 
     /* ফুটার */
-    .footer {
-      padding: 1rem 1.5rem;
-      background: #f1f5f9;
+    .pro-footer {
+      background: #1e293b;
+      padding: 1rem 2rem;
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      gap: 1rem;
+      color: #94a3b8;
+      font-size: 0.75rem;
+    }
+
+    /* স্ক্রলবার */
+    .premium-grid::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .premium-grid::-webkit-scrollbar-track {
+      background: #e2e8f0;
+      border-radius: 10px;
+    }
+
+    .premium-grid::-webkit-scrollbar-thumb {
+      background: #0f3460;
+      border-radius: 10px;
     }
 
     /* মোবাইল রেসপন্সিভ */
     @media (max-width: 768px) {
       body {
-        padding: 0.5rem;
+        padding: 0.8rem;
       }
 
-      .header h1 {
+      .pro-header h1 {
         font-size: 1.2rem;
       }
 
-      .control-panel {
-        padding: 1rem;
-      }
-
-      .color-section {
+      .control-strip {
         flex-direction: column;
         align-items: stretch;
       }
 
-      .color-box {
+      .control-group {
         justify-content: space-between;
       }
 
-      .threshold-control {
-        justify-content: space-between;
-      }
-
-      .image-grid {
+      .premium-grid {
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-        gap: 0.8rem;
+        gap: 1rem;
         padding: 1rem;
       }
 
-      .image-card img {
-        width: 80px;
-        height: 80px;
+      .card-image {
+        width: 90px;
+        height: 90px;
       }
 
-      .btn {
-        padding: 0.5rem 1.2rem;
-        font-size: 0.8rem;
+      .premium-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.75rem;
       }
     }
 
-    /* স্ক্রলবার */
-    .image-grid::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .image-grid::-webkit-scrollbar-track {
-      background: #e2e8f0;
-      border-radius: 10px;
-    }
-
-    .image-grid::-webkit-scrollbar-thumb {
+    .toast-msg {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
       background: #0f3460;
-      border-radius: 10px;
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border-radius: 50px;
+      z-index: 1000;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <div class="main-card">
-      <div class="header">
+  <div class="pro-container">
+    <div class="pro-card">
+      <div class="pro-header">
         <h1>
-          🎨 PRO ICON FORGE
-          <span class="badge">⚡ 4K সাপোর্ট | সব ফরম্যাট | 100% থ্রেশহোল্ড</span>
+          <i class="fas fa-magic"></i> PRO ICON FORGE STUDIO
+          <span class="pro-badge"><i class="fas fa-crown"></i> 4K + ZIP আপলোড</span>
         </h1>
-        <p style="margin-top: 0.5rem; opacity: 0.9;">পেশাদার মানের কালার রিপ্লেসমেন্ট টুল - আসল সাইজ রিটেইন করে</p>
+        <p style="opacity:0.8; font-size:0.8rem; margin-top:0.5rem;">পেশাদার কালার রিপ্লেসমেন্ট | জিপ আপলোড ও
+          এক্সট্র্যাক্ট | ১০০% থ্রেশহোল্ড</p>
       </div>
 
-      <div class="control-panel">
-        <div class="color-section">
-          <div class="color-box">
-            <span>🎯 টার্গেট কালার</span>
-            <input type="text" id="targetHex" class="hex-input" value="#2C7DA0" maxlength="7">
-            <div id="colorSwatch" class="color-swatch" style="background: #2C7DA0"></div>
+      <!-- সব কন্ট্রোল উপরে একসাথে -->
+      <div class="control-strip">
+        <div class="control-group">
+          <div class="color-control">
+            <i class="fas fa-palette"></i>
+            <input type="text" id="targetHexMaster" class="hex-field" value="#2C7DA0" maxlength="7">
+            <div id="colorSwatchMaster" class="swatch-field" style="background:#2C7DA0"></div>
           </div>
 
-          <div class="threshold-control">
-            <label>🎚️ থ্রেশহোল্ড (কালার ম্যাচিং সেনসিটিভিটি)</label>
-            <input type="range" id="thresholdSlider" min="0" max="100" value="100" step="1">
-            <span id="thresholdPercent" class="threshold-value">100%</span>
-            <small style="color: #64748b;">100% = সব কালার ফোর্সড চেঞ্জ</small>
-          </div>
-
-          <div class="mode-tabs">
-            <button class="mode-btn active" data-mode="recolor">✨ প্রো রিকালার</button>
-            <button class="mode-btn" data-mode="regenerate">🔮 অটো ট্রেস এইচডি</button>
+          <div class="threshold-wrap">
+            <span><i class="fas fa-sliders-h"></i> থ্রেশহোল্ড</span>
+            <input type="range" id="thresholdRange" min="0" max="100" value="100">
+            <span id="thresholdValue" class="threshold-val">100%</span>
           </div>
         </div>
 
-        <div class="preset-colors" id="presetContainer"></div>
-      </div>
+        <div class="control-group">
+          <div class="mode-switch"
+            style="display: flex; gap:0.5rem; background:#f1f5f9; padding:0.3rem; border-radius:60px;">
+            <button class="mode-opt-btn active" data-mode="recolor"><i class="fas fa-paint-bucket"></i> রিকালার</button>
+            <button class="mode-opt-btn" data-mode="regenerate"><i class="fas fa-vector-square"></i> ট্রেস
+              এইচডি</button>
+          </div>
 
-      <div class="upload-area">
-        <button id="uploadBtn" class="btn btn-primary">📂 ইমেজ আপলোড করুন</button>
-        <input type="file" id="fileInput" multiple accept="image/*" style="display: none">
-        <div class="stats" id="statsCount">📄 0টি ইমেজ</div>
-        <div class="stats" id="qualityStatus">✨ 4K সাপোর্ট | আসল সাইজে ডাউনলোড</div>
-      </div>
-
-      <div id="imageGrid" class="image-grid">
-        <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #64748b;">
-          ⬆️ PNG, JPG, JPEG, WebP, BMP - সব ফরম্যাট সাপোর্ট করে। আপলোড করুন।
+          <button id="globalApplyBtn" class="premium-btn premium-btn-primary"><i class="fas fa-play"></i> সব
+            এপ্লাই</button>
+          <button id="globalClearBtn" class="premium-btn premium-btn-danger"><i class="fas fa-trash"></i> সব
+            মুছুন</button>
+          <button id="zipDownloadBtn" class="premium-btn premium-btn-success"><i class="fas fa-download"></i> জিপ
+            (সিলেক্টেড)</button>
         </div>
       </div>
 
-      <div class="footer">
-        <div style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
-          <button id="applyAllBtn" class="btn btn-success">🔥 সবার ক্ষেত্রে প্রয়োগ করুন</button>
-          <button id="zipSelectedBtn" class="btn btn-primary">📦 জিপ (সিলেক্টেড)</button>
-          <button id="clearAllBtn" class="btn btn-warning">🗑 সব মুছুন</button>
+      <!-- প্রিসেট কালার স্ট্রিপ -->
+      <div class="preset-strip" id="presetBar"></div>
+
+      <!-- আপলোড জোন -->
+      <div class="upload-strip">
+        <button id="uploadImagesBtn" class="premium-btn premium-btn-primary"><i class="fas fa-cloud-upload-alt"></i>
+          ইমেজ আপলোড</button>
+        <button id="uploadZipBtn" class="premium-btn premium-btn-warning"><i class="fas fa-file-archive"></i> জিপ আপলোড
+          & এক্সট্র্যাক্ট</button>
+        <input type="file" id="hiddenImageInput" multiple accept="image/png,image/jpeg,image/jpg,image/webp,image/bmp"
+          style="display:none">
+        <input type="file" id="hiddenZipInput" accept=".zip" style="display:none">
+        <span id="statsBadge" class="pro-badge" style="background:#e2e8f0; color:#1e293b;"><i class="fas fa-images"></i>
+          0টি আইকন</span>
+        <span id="liveStatus" class="pro-badge" style="background:#d9f0e6; color:#156b42;"><i
+            class="fas fa-info-circle"></i> 4K + আসল সাইজ</span>
+      </div>
+
+      <!-- গ্রিড ভিউ -->
+      <div id="proGrid" class="premium-grid">
+        <div style="grid-column:1/-1; text-align:center; padding:3rem; color:#94a3b8;">
+          <i class="fas fa-cloud-upload-alt" style="font-size:3rem; margin-bottom:1rem; display:block;"></i>
+          PNG, JPG, WebP, BMP বা ZIP আপলোড করুন। জিপ ফাইল অটো এক্সট্র্যাক্ট হবে।
         </div>
-        <div class="stats">✅ সিলেক্ট করুন → জিপ করুন | প্রতিটি কার্ড থেকে সিঙ্গেল ডাউনলোড</div>
+      </div>
+
+      <div class="pro-footer">
+        <div><i class="fas fa-check-circle"></i> পিক্সেল-পারফেক্ট রিকালার</div>
+        <div><i class="fas fa-mobile-alt"></i> রেসপন্সিভ ডিজাইন | Redmi Note 15 5G অপটিমাইজড</div>
       </div>
     </div>
   </div>
 
   <script>
     (function () {
-      // স্টেট ম্যানেজমেন্ট
-      let images = []; // { id, name, originalBlob, originalWidth, originalHeight, processedBlob, processedURL, selected }
+      // ---------- গ্লোবাল স্টেট ----------
+      let iconItems = []; // { id, name, originalBlob, origW, origH, processedBlob, processedURL, selected }
       let nextId = 1;
       let currentMode = "recolor";
       let currentThreshold = 100;
 
       // DOM এলিমেন্টস
-      const hexInput = document.getElementById('targetHex');
-      const colorSwatch = document.getElementById('colorSwatch');
-      const thresholdSlider = document.getElementById('thresholdSlider');
-      const thresholdPercent = document.getElementById('thresholdPercent');
-      const uploadBtn = document.getElementById('uploadBtn');
-      const fileInput = document.getElementById('fileInput');
-      const imageGrid = document.getElementById('imageGrid');
-      const statsCount = document.getElementById('statsCount');
-      const applyAllBtn = document.getElementById('applyAllBtn');
-      const zipSelectedBtn = document.getElementById('zipSelectedBtn');
-      const clearAllBtn = document.getElementById('clearAllBtn');
-      const qualityStatus = document.getElementById('qualityStatus');
+      const gridContainer = document.getElementById('proGrid');
+      const targetHexInput = document.getElementById('targetHexMaster');
+      const colorSwatch = document.getElementById('colorSwatchMaster');
+      const thresholdSlider = document.getElementById('thresholdRange');
+      const thresholdSpan = document.getElementById('thresholdValue');
+      const uploadImagesBtn = document.getElementById('uploadImagesBtn');
+      const uploadZipBtn = document.getElementById('uploadZipBtn');
+      const hiddenImageFile = document.getElementById('hiddenImageInput');
+      const hiddenZipFile = document.getElementById('hiddenZipInput');
+      const applyAllBtn = document.getElementById('globalApplyBtn');
+      const clearAllBtn = document.getElementById('globalClearBtn');
+      const zipDownloadBtn = document.getElementById('zipDownloadBtn');
+      const statsBadge = document.getElementById('statsBadge');
+      const liveStatus = document.getElementById('liveStatus');
 
-      // প্রিসেট কালার (আপনার দেওয়া কালার)
-      const presetColors = [
-        { hex: "#1686D0", name: "নীল" },
-        { hex: "#006378", name: "গাঢ় নীল" },
-        { hex: "#00FF62", name: "সবুজ" },
-        { hex: "#061D2E", name: "ডার্ক নেভি" },
-        { hex: "#0A2E39", name: "টিল" },
-        { hex: "#041C30", name: "মিডনাইট" },
-        { hex: "#FFC300", name: "হলুদ" },
-        { hex: "#FF7E29", name: "কমলা" },
-        { hex: "#FF5CA1", name: "গোলাপি" },
-        { hex: "#E68585", name: "হালকা লাল" },
-        { hex: "#7646FF", name: "পারপল" },
-        { hex: "#000000", name: "কালো" },
-        { hex: "#FFFFFF", name: "সাদা" },
-        { hex: "#FF0000", name: "লাল" }
+      // প্রিসেট কালার
+      const presetArray = [
+        "#1686D0", "#006378", "#00FF62", "#061D2E", "#0A2E39", "#041C30",
+        "#FFC300", "#FF7E29", "#FF5CA1", "#E68585", "#7646FF", "#000000", "#FFFFFF", "#FF0000"
       ];
 
       // হেক্স নরমালাইজ
-      function normalizeHex(hex) {
-        let h = hex.trim();
-        if (!h.startsWith('#')) h = '#' + h;
-        if (/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(h)) {
-          if (h.length === 4) {
-            h = '#' + h[1] + h[1] + h[2] + h[2] + h[3] + h[3];
-          }
-          return h.toUpperCase();
+      function normalizeHex(h) {
+        let hex = h.trim();
+        if (!hex.startsWith('#')) hex = '#' + hex;
+        if (/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(hex)) {
+          if (hex.length === 4) hex = '#' + hex[1] + hex[1] + hex[2] + hex[2] + hex[3] + hex[3];
+          return hex.toUpperCase();
         }
         return null;
       }
 
-      function updateSwatch() {
-        let valid = normalizeHex(hexInput.value);
-        if (valid) {
-          colorSwatch.style.backgroundColor = valid;
-        } else {
-          colorSwatch.style.backgroundColor = "#CCCCCC";
-        }
+      function updateSwatchUI() {
+        let valid = normalizeHex(targetHexInput.value);
+        colorSwatch.style.backgroundColor = valid || "#CCCCCC";
       }
-
-      hexInput.addEventListener('input', updateSwatch);
+      targetHexInput.addEventListener('input', updateSwatchUI);
       colorSwatch.addEventListener('click', () => {
-        let picker = document.createElement('input');
-        picker.type = 'color';
-        picker.value = normalizeHex(hexInput.value) || "#2C7DA0";
-        picker.addEventListener('input', (e) => {
-          hexInput.value = e.target.value;
-          updateSwatch();
-        });
-        picker.click();
+        let pick = document.createElement('input');
+        pick.type = 'color';
+        pick.value = normalizeHex(targetHexInput.value) || "#2C7DA0";
+        pick.addEventListener('input', (e) => { targetHexInput.value = e.target.value; updateSwatchUI(); });
+        pick.click();
       });
-      updateSwatch();
+      updateSwatchUI();
 
-      // থ্রেশহোল্ড স্লাইডার
+      // থ্রেশহোল্ড
       thresholdSlider.addEventListener('input', (e) => {
         currentThreshold = parseInt(e.target.value);
-        thresholdPercent.innerText = currentThreshold + '%';
+        thresholdSpan.innerText = currentThreshold + '%';
       });
 
-      // প্রিসেট বিল্ড
-      function buildPresets() {
-        const container = document.getElementById('presetContainer');
-        container.innerHTML = '';
-        presetColors.forEach(p => {
-          const swatch = document.createElement('div');
-          swatch.className = 'preset-item';
-          swatch.style.backgroundColor = p.hex;
-          swatch.title = p.name + ' ' + p.hex;
-          swatch.addEventListener('click', () => {
-            hexInput.value = p.hex;
-            updateSwatch();
+      // মোড টগল
+      function setActiveMode(mode) {
+        currentMode = mode;
+        document.querySelectorAll('.mode-opt-btn').forEach(btn => {
+          if (btn.dataset.mode === mode) btn.classList.add('active');
+          else btn.classList.remove('active');
+        });
+        liveStatus.innerHTML = (mode === 'recolor') ? '🎨 রিকালার মোড: 100% ফোর্সড রিপ্লেস' : '🔮 ট্রেস মোড: এজ স্মুথ + রিকালার';
+      }
+      document.querySelectorAll('.mode-opt-btn').forEach(btn => {
+        btn.addEventListener('click', () => setActiveMode(btn.dataset.mode));
+      });
+      setActiveMode('recolor');
+
+      // প্রিসেট বার তৈরি
+      function buildPresetBar() {
+        const bar = document.getElementById('presetBar');
+        bar.innerHTML = '<span style="font-weight:600; font-size:0.7rem;"><i class="fas fa-swatchbook"></i> প্রিসেট:</span>';
+        presetArray.forEach(hex => {
+          const sw = document.createElement('div');
+          sw.className = 'preset-dot';
+          sw.style.backgroundColor = hex;
+          sw.addEventListener('click', () => {
+            targetHexInput.value = hex;
+            updateSwatchUI();
           });
-          container.appendChild(swatch);
+          bar.appendChild(sw);
         });
       }
-      buildPresets();
+      buildPresetBar();
 
-      // ফোর্সড কালার রিপ্লেসমেন্ট (থ্রেশহোল্ড 100% পর্যন্ত)
-      function forceColorReplace(imageData, targetRGB, threshold) {
-        const data = imageData.data;
-        const width = imageData.width;
-        const height = imageData.height;
-        let changed = false;
-
-        // পুরো ইমেজের ডমিনেন্ট কালার বের করি
-        let colorSum = { r: 0, g: 0, b: 0, count: 0 };
-        for (let i = 0; i < data.length; i += 4) {
-          if (data[i + 3] > 10) {
-            colorSum.r += data[i];
-            colorSum.g += data[i + 1];
-            colorSum.b += data[i + 2];
-            colorSum.count++;
-          }
-        }
-
-        let dominantColor = {
-          r: colorSum.count > 0 ? colorSum.r / colorSum.count : 128,
-          g: colorSum.count > 0 ? colorSum.g / colorSum.count : 128,
-          b: colorSum.count > 0 ? colorSum.b / colorSum.count : 128
-        };
-
-        // প্রতিটি পিক্সেল চেক করে বদলাই
-        for (let i = 0; i < data.length; i += 4) {
-          if (data[i + 3] > 10) { // আলফা থাকলেই কাজ করব
-            const dr = data[i] - dominantColor.r;
-            const dg = data[i + 1] - dominantColor.g;
-            const db = data[i + 2] - dominantColor.b;
-            const distance = Math.sqrt(dr * dr + dg * dg + db * db);
-            const maxDistance = Math.sqrt(255 * 255 * 3);
-            const similarity = (1 - (distance / maxDistance)) * 100;
-
-            // থ্রেশহোল্ড 100 মানে সব রং বদলাবে
-            if (similarity >= (100 - threshold) || threshold === 100) {
-              data[i] = targetRGB.r;
-              data[i + 1] = targetRGB.g;
-              data[i + 2] = targetRGB.b;
-              changed = true;
-            }
-          }
-        }
-
-        return changed;
-      }
-
-      // ইমেজ প্রসেস - জুম করে কাজ করে, তারপর আসল সাইজে ফিরিয়ে আনে
-      async function processImage(blob, targetHex, mode, threshold, originalWidth, originalHeight) {
-        return new Promise(async (resolve) => {
-          // প্রথমে প্রসেসিং এর জন্য জুম করব (বড় সাইজে কাজ করব)
-          const img = new Image();
-          const url = URL.createObjectURL(blob);
-
-          img.onload = async () => {
-            const processingWidth = Math.max(img.width, 1024); // কমপক্ষে 1024px এ কাজ করব
-            const processingHeight = Math.floor((processingWidth / img.width) * img.height);
-
-            // প্রসেসিং ক্যানভাস (বড় সাইজ)
-            const processCanvas = document.createElement('canvas');
-            processCanvas.width = processingWidth;
-            processCanvas.height = processingHeight;
-            const processCtx = processCanvas.getContext('2d', { alpha: true });
-            processCtx.imageSmoothingQuality = 'high';
-            processCtx.drawImage(img, 0, 0, processingWidth, processingHeight);
-
-            let processData = processCtx.getImageData(0, 0, processingWidth, processingHeight);
-
-            const validHex = normalizeHex(targetHex);
-            const targetRGB = {
-              r: parseInt(validHex.slice(1, 3), 16),
-              g: parseInt(validHex.slice(3, 5), 16),
-              b: parseInt(validHex.slice(5, 7), 16)
-            };
-
-            if (mode === "recolor") {
-              forceColorReplace(processData, targetRGB, threshold);
-            } else {
-              // রিজেনারেট মোড - এজ স্মুথ করে
-              forceColorReplace(processData, targetRGB, threshold);
-              // স্মুথিং পাস
-              const data = processData.data;
-              const w = processData.width;
-              const h = processData.height;
-              for (let y = 1; y < h - 1; y++) {
-                for (let x = 1; x < w - 1; x++) {
-                  const idx = (y * w + x) * 4;
-                  if (data[idx + 3] > 20) {
-                    let rSum = 0, gSum = 0, bSum = 0, cnt = 0;
-                    for (let dy = -1; dy <= 1; dy++) {
-                      for (let dx = -1; dx <= 1; dx++) {
-                        const nidx = ((y + dy) * w + (x + dx)) * 4;
-                        if (data[nidx + 3] > 20) {
-                          rSum += data[nidx];
-                          gSum += data[nidx + 1];
-                          bSum += data[nidx + 2];
-                          cnt++;
-                        }
-                      }
-                    }
-                    if (cnt > 0) {
-                      data[idx] = (data[idx] + rSum / cnt) / 2;
-                      data[idx + 1] = (data[idx + 1] + gSum / cnt) / 2;
-                      data[idx + 2] = (data[idx + 2] + bSum / cnt) / 2;
-                    }
-                  }
-                }
-              }
-              processCtx.putImageData(processData, 0, 0);
-            }
-
-            processCtx.putImageData(processData, 0, 0);
-
-            // এখন আসল সাইজে ফিরিয়ে আনব
-            const finalCanvas = document.createElement('canvas');
-            finalCanvas.width = originalWidth;
-            finalCanvas.height = originalHeight;
-            const finalCtx = finalCanvas.getContext('2d', { alpha: true });
-            finalCtx.imageSmoothingQuality = 'high';
-            finalCtx.drawImage(processCanvas, 0, 0, processingWidth, processingHeight, 0, 0, originalWidth, originalHeight);
-
-            finalCanvas.toBlob(resultBlob => {
-              URL.revokeObjectURL(url);
-              resolve(resultBlob);
-            }, 'image/png');
-          };
-
-          img.onerror = () => {
-            URL.revokeObjectURL(url);
-            resolve(blob);
-          };
-          img.src = url;
-        });
-      }
-
-      // ইমেজ প্রসেস করে ফাইল স্টোর আপডেট
-      async function processSingleImage(item, forceRefresh = false) {
-        if (!item.originalBlob) return false;
-        try {
-          const processed = await processImage(
-            item.originalBlob,
-            hexInput.value,
-            currentMode,
-            currentThreshold,
-            item.originalWidth,
-            item.originalHeight
-          );
-
-          if (item.processedURL) URL.revokeObjectURL(item.processedURL);
-          item.processedBlob = processed;
-          item.processedURL = URL.createObjectURL(processed);
-          return true;
-        } catch (e) {
-          console.error('প্রসেসিং এ সমস্যা:', e);
-          return false;
-        }
-      }
-
-      // সব ইমেজে অ্যাপ্লাই
-      async function applyToAll() {
-        qualityStatus.innerHTML = '⏳ প্রসেসিং চলছে... দয়া করে অপেক্ষা করুন';
-        for (let item of images) {
-          await processSingleImage(item);
-        }
-        renderGallery();
-        qualityStatus.innerHTML = '✅ প্রসেসিং সম্পূর্ণ | আসল সাইজ রিটেইন করা হয়েছে';
-        setTimeout(() => {
-          qualityStatus.innerHTML = '✨ 4K সাপোর্ট | আসল সাইজে ডাউনলোড | 100% থ্রেশহোল্ড';
-        }, 3000);
-      }
-
-      // ইমেজ সাইজ পাওয়া
-      function getImageSize(blob) {
+      // ---------- ইমেজ সাইজ বের করা ----------
+      function getImageDimensions(blob) {
         return new Promise((resolve) => {
-          const img = new Image();
           const url = URL.createObjectURL(blob);
+          const img = new Image();
           img.onload = () => {
             URL.revokeObjectURL(url);
             resolve({ width: img.width, height: img.height });
@@ -705,185 +619,299 @@
         });
       }
 
-      // ফাইল অ্যাড
-      async function addFiles(files) {
-        for (let file of files) {
-          const id = nextId++;
-          const originalBlob = file.slice(0, file.size, file.type);
-          const originalURL = URL.createObjectURL(originalBlob);
-          const size = await getImageSize(originalBlob);
-
-          const newImage = {
-            id: id,
-            name: file.name,
-            originalBlob: originalBlob,
-            originalURL: originalURL,
-            originalWidth: size.width,
-            originalHeight: size.height,
-            processedBlob: originalBlob,
-            processedURL: originalURL,
-            selected: true
-          };
-
-          images.push(newImage);
+      // ---------- ফোর্সড রিকালার (থ্রেশহোল্ড ১০০% পর্যন্ত) ----------
+      function forceReplaceColor(imageData, targetRgb, thresholdPercent) {
+        const data = imageData.data;
+        let colorSum = { r: 0, g: 0, b: 0, cnt: 0 };
+        for (let i = 0; i < data.length; i += 4) {
+          if (data[i + 3] > 10) {
+            colorSum.r += data[i];
+            colorSum.g += data[i + 1];
+            colorSum.b += data[i + 2];
+            colorSum.cnt++;
+          }
         }
-        renderGallery();
-        updateStats();
+        if (colorSum.cnt === 0) return false;
+        const dominant = {
+          r: colorSum.r / colorSum.cnt,
+          g: colorSum.g / colorSum.cnt,
+          b: colorSum.b / colorSum.cnt
+        };
+        let changed = false;
+        for (let i = 0; i < data.length; i += 4) {
+          if (data[i + 3] > 10) {
+            const diff = Math.hypot(data[i] - dominant.r, data[i + 1] - dominant.g, data[i + 2] - dominant.b);
+            const maxDiff = Math.hypot(255, 255, 255);
+            const similarity = (1 - diff / maxDiff) * 100;
+            if (similarity >= (100 - thresholdPercent) || thresholdPercent === 100) {
+              data[i] = targetRgb.r;
+              data[i + 1] = targetRgb.g;
+              data[i + 2] = targetRgb.b;
+              changed = true;
+            }
+          }
+        }
+        return changed;
       }
 
+      // ---------- প্রসেসিং: জুম করে প্রসেস, আসল সাইজে ফেরত ----------
+      async function masterProcess(originalBlob, targetHex, mode, threshold, origW, origH) {
+        return new Promise(async (resolve) => {
+          const img = new Image();
+          const url = URL.createObjectURL(originalBlob);
+          img.onload = async () => {
+            const procW = Math.max(img.width, 1024);
+            const procH = Math.floor((procW / img.width) * img.height);
+            const procCanvas = document.createElement('canvas');
+            procCanvas.width = procW;
+            procCanvas.height = procH;
+            const ctx = procCanvas.getContext('2d', { alpha: true });
+            ctx.imageSmoothingQuality = 'high';
+            ctx.drawImage(img, 0, 0, procW, procH);
+            let imgData = ctx.getImageData(0, 0, procW, procH);
+            const validHex = normalizeHex(targetHex);
+            const targetRgb = {
+              r: parseInt(validHex.slice(1, 3), 16),
+              g: parseInt(validHex.slice(3, 5), 16),
+              b: parseInt(validHex.slice(5, 7), 16)
+            };
+            forceReplaceColor(imgData, targetRgb, threshold);
+            if (mode === 'regenerate') {
+              // স্মুথিং পাস
+              const data = imgData.data;
+              const w = imgData.width, h = imgData.height;
+              for (let y = 1; y < h - 1; y++) {
+                for (let x = 1; x < w - 1; x++) {
+                  const idx = (y * w + x) * 4;
+                  if (data[idx + 3] > 20) {
+                    let rs = 0, gs = 0, bs = 0, cc = 0;
+                    for (let dy = -1; dy <= 1; dy++) {
+                      for (let dx = -1; dx <= 1; dx++) {
+                        const nidx = ((y + dy) * w + (x + dx)) * 4;
+                        if (data[nidx + 3] > 20) {
+                          rs += data[nidx];
+                          gs += data[nidx + 1];
+                          bs += data[nidx + 2];
+                          cc++;
+                        }
+                      }
+                    }
+                    if (cc > 0) {
+                      data[idx] = (data[idx] + rs / cc) / 2;
+                      data[idx + 1] = (data[idx + 1] + gs / cc) / 2;
+                      data[idx + 2] = (data[idx + 2] + bs / cc) / 2;
+                    }
+                  }
+                }
+              }
+              ctx.putImageData(imgData, 0, 0);
+            } else {
+              ctx.putImageData(imgData, 0, 0);
+            }
+            // আসল সাইজে ফেরত
+            const finalCanvas = document.createElement('canvas');
+            finalCanvas.width = origW;
+            finalCanvas.height = origH;
+            const finalCtx = finalCanvas.getContext('2d');
+            finalCtx.imageSmoothingQuality = 'high';
+            finalCtx.drawImage(procCanvas, 0, 0, procW, procH, 0, 0, origW, origH);
+            finalCanvas.toBlob(resBlob => {
+              URL.revokeObjectURL(url);
+              resolve(resBlob);
+            }, 'image/png');
+          };
+          img.onerror = () => { URL.revokeObjectURL(url); resolve(originalBlob); };
+          img.src = url;
+        });
+      }
+
+      async function processSingleItem(item) {
+        if (!item.originalBlob) return false;
+        try {
+          const newBlob = await masterProcess(item.originalBlob, targetHexInput.value, currentMode, currentThreshold, item.origW, item.origH);
+          if (item.processedURL) URL.revokeObjectURL(item.processedURL);
+          item.processedBlob = newBlob;
+          item.processedURL = URL.createObjectURL(newBlob);
+          return true;
+        } catch (e) { console.warn(e); return false; }
+      }
+
+      async function applyToAll() {
+        liveStatus.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> প্রসেসিং চলছে...';
+        for (let it of iconItems) await processSingleItem(it);
+        renderGrid();
+        liveStatus.innerHTML = '✅ প্রসেসিং শেষ! আসল সাইজে ডাউনলোড প্রস্তুত';
+        setTimeout(() => liveStatus.innerHTML = '<i class="fas fa-rocket"></i> 4K + আসল সাইজ | 100% থ্রেশহোল্ড', 2000);
+      }
+
+      // ---------- আইটেম যোগ করা ----------
+      async function addItemFromBlob(file, originalName) {
+        const id = nextId++;
+        const blob = file.slice(0, file.size, file.type);
+        const dims = await getImageDimensions(blob);
+        const obj = {
+          id, name: originalName,
+          originalBlob: blob,
+          origW: dims.width, origH: dims.height,
+          processedBlob: blob,
+          processedURL: URL.createObjectURL(blob),
+          selected: true
+        };
+        iconItems.push(obj);
+        await processSingleItem(obj);
+        renderGrid();
+      }
+
+      // জিপ এক্সট্র্যাক্ট ও অ্যাড
+      async function extractAndAddZip(zipBlob) {
+        try {
+          const zip = await JSZip.loadAsync(zipBlob);
+          const imageFiles = [];
+          for (const [filename, fileData] of Object.entries(zip.files)) {
+            if (!fileData.dir && /\.(png|jpe?g|webp|bmp)$/i.test(filename)) {
+              const blob = await fileData.async('blob');
+              imageFiles.push({ blob, name: filename });
+            }
+          }
+          if (imageFiles.length === 0) throw new Error('জিপে কোন সাপোর্টেড ইমেজ নেই');
+          for (const img of imageFiles) {
+            await addItemFromBlob(img.blob, img.name);
+          }
+          showToast(`${imageFiles.length}টি ইমেজ জিপ থেকে যোগ হয়েছে`);
+        } catch (e) {
+          alert('জিপ এক্সট্র্যাক্ট ব্যর্থ: ' + e.message);
+        }
+      }
+
+      // জিপ আপলোড হ্যান্ডলার
+      uploadZipBtn.addEventListener('click', () => hiddenZipFile.click());
+      hiddenZipFile.addEventListener('change', async (e) => {
+        if (e.target.files.length) {
+          const zipFile = e.target.files[0];
+          await extractAndAddZip(zipFile);
+        }
+        hiddenZipFile.value = '';
+      });
+
+      // ইমেজ আপলোড
+      uploadImagesBtn.addEventListener('click', () => hiddenImageFile.click());
+      hiddenImageFile.addEventListener('change', async (e) => {
+        if (e.target.files.length) {
+          for (let file of e.target.files) {
+            await addItemFromBlob(file, file.name);
+          }
+        }
+        hiddenImageFile.value = '';
+      });
+
       // গ্যালারি রেন্ডার
-      function renderGallery() {
-        if (images.length === 0) {
-          imageGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #64748b;">
-            ⬆️ PNG, JPG, JPEG, WebP, BMP - সব ফরম্যাট সাপোর্ট করে। 4K ইমেজও প্রসেস করতে পারে।
+      function renderGrid() {
+        if (iconItems.length === 0) {
+          gridContainer.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:3rem; color:#94a3b8;">
+            <i class="fas fa-cloud-upload-alt" style="font-size:3rem; margin-bottom:1rem; display:block;"></i>
+            PNG, JPG, WebP, BMP বা ZIP আপলোড করুন। জিপ অটো এক্সট্র্যাক্ট হবে।
           </div>`;
+          statsBadge.innerHTML = `<i class="fas fa-images"></i> 0টি আইকন`;
           return;
         }
-
         let html = '';
-        for (let img of images) {
-          const preview = img.processedURL || img.originalURL;
+        for (let it of iconItems) {
+          const preview = it.processedURL;
           html += `
-            <div class="image-card" data-id="${img.id}">
-              <img src="${preview}" alt="${escapeHtml(img.name)}" loading="lazy">
-              <div style="font-size: 0.7rem; font-weight: 600; margin: 0.5rem 0;">${shortName(img.name)}</div>
-              <div style="font-size: 0.65rem; color: #15803d;">${img.originalWidth}x${img.originalHeight}</div>
-              <label style="display: flex; align-items: center; justify-content: center; gap: 0.3rem; margin: 0.5rem 0;">
-                <input type="checkbox" class="select-checkbox" data-id="${img.id}" ${img.selected ? 'checked' : ''}>
-                <span style="font-size: 0.7rem;">সিলেক্ট</span>
-              </label>
+            <div class="icon-card-pro" data-id="${it.id}">
+              <input type="checkbox" class="card-check" data-id="${it.id}" ${it.selected ? 'checked' : ''}>
+              <img src="${preview}" class="card-image" alt="${escapeHtml(it.name)}" loading="lazy">
+              <div class="card-name">${shortName(it.name)}</div>
+              <div class="card-size">${it.origW}x${it.origH}</div>
               <div class="card-actions">
-                <button class="btn-small" style="background: #15803d; color: white;" onclick="window.downloadSingle(${img.id})">⬇ ডাউনলোড</button>
-                <button class="btn-small" style="background: #dc2626; color: white;" onclick="window.removeImage(${img.id})">🗑 মুছুন</button>
+                <button class="mini-btn mini-download" onclick="window.downloadSingleItem(${it.id})"><i class="fas fa-download"></i></button>
+                <button class="mini-btn mini-delete" onclick="window.deleteItem(${it.id})"><i class="fas fa-trash"></i></button>
               </div>
             </div>
           `;
         }
-        imageGrid.innerHTML = html;
-        updateStats();
+        gridContainer.innerHTML = html;
+        const selCount = iconItems.filter(i => i.selected).length;
+        statsBadge.innerHTML = `<i class="fas fa-images"></i> ${iconItems.length}টি আইকন | ${selCount}টি সিলেক্টেড`;
+        // checkbox ইভেন্ট
+        document.querySelectorAll('.card-check').forEach(cb => {
+          cb.addEventListener('change', (e) => {
+            const id = parseInt(cb.dataset.id);
+            const it = iconItems.find(i => i.id === id);
+            if (it) it.selected = cb.checked;
+            const newSel = iconItems.filter(i => i.selected).length;
+            statsBadge.innerHTML = `<i class="fas fa-images"></i> ${iconItems.length}টি আইকন | ${newSel}টি সিলেক্টেড`;
+          });
+        });
       }
 
-      function updateStats() {
-        const selectedCount = images.filter(i => i.selected).length;
-        statsCount.innerHTML = `📄 ${images.length}টি ইমেজ | ${selectedCount}টি সিলেক্টেড`;
-      }
-
-      // সিঙ্গেল ডাউনলোড
-      window.downloadSingle = async function (id) {
-        const item = images.find(i => i.id === id);
+      window.downloadSingleItem = async function (id) {
+        const item = iconItems.find(i => i.id === id);
         if (item) {
-          qualityStatus.innerHTML = '⏳ প্রসেসিং একক ইমেজ...';
-          await processSingleImage(item);
-          const suffix = currentMode === 'recolor' ? 'recolor' : 'trace';
-          const hexVal = normalizeHex(hexInput.value).replace('#', '');
-          const filename = item.name.replace(/\.[^/.]+$/, '') + `_${suffix}_${hexVal}.png`;
-          saveAs(item.processedBlob, filename);
-          renderGallery();
-          qualityStatus.innerHTML = '✅ ডাউনলোড সম্পূর্ণ | আসল সাইজ রিটেইন হয়েছে';
-          setTimeout(() => {
-            qualityStatus.innerHTML = '✨ 4K সাপোর্ট | আসল সাইজে ডাউনলোড | 100% থ্রেশহোল্ড';
-          }, 2000);
+          await processSingleItem(item);
+          const hexVal = normalizeHex(targetHexInput.value).replace('#', '');
+          const modeSuffix = currentMode === 'recolor' ? 'recolor' : 'trace';
+          const fname = item.name.replace(/\.[^/.]+$/, '') + `_${modeSuffix}_${hexVal}.png`;
+          saveAs(item.processedBlob, fname);
+          showToast('ডাউনলোড সম্পূর্ণ!');
         }
       };
 
-      window.removeImage = function (id) {
-        const index = images.findIndex(i => i.id === id);
-        if (index !== -1) {
-          const img = images[index];
-          if (img.originalURL) URL.revokeObjectURL(img.originalURL);
-          if (img.processedURL && img.processedURL !== img.originalURL) URL.revokeObjectURL(img.processedURL);
-          images.splice(index, 1);
-          renderGallery();
+      window.deleteItem = function (id) {
+        const idx = iconItems.findIndex(i => i.id === id);
+        if (idx !== -1) {
+          const it = iconItems[idx];
+          if (it.processedURL) URL.revokeObjectURL(it.processedURL);
+          if (it.originalURL && it.originalURL !== it.processedURL) URL.revokeObjectURL(it.originalURL);
+          iconItems.splice(idx, 1);
+          renderGrid();
         }
       };
 
-      // জিপ সিলেক্টেড
-      async function zipSelected() {
-        const selected = images.filter(i => i.selected);
-        if (selected.length === 0) {
-          alert('প্লিজ কিছু ইমেজ সিলেক্ট করুন');
-          return;
-        }
-
-        qualityStatus.innerHTML = '⏳ জিপ তৈরি হচ্ছে...';
+      async function downloadSelectedZip() {
+        const selected = iconItems.filter(i => i.selected);
+        if (selected.length === 0) { alert('কিছু সিলেক্ট করুন'); return; }
+        liveStatus.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> জিপ তৈরি...';
         const zip = new JSZip();
-
-        for (let item of selected) {
-          await processSingleImage(item);
-          const hexVal = normalizeHex(hexInput.value).replace('#', '');
+        for (let it of selected) {
+          await processSingleItem(it);
+          const hexVal = normalizeHex(targetHexInput.value).replace('#', '');
           const suffix = currentMode === 'recolor' ? 'recolor' : 'trace';
-          const filename = item.name.replace(/\.[^/.]+$/, '') + `_${suffix}_${hexVal}.png`;
-          zip.file(filename, item.processedBlob);
+          const fname = it.name.replace(/\.[^/.]+$/, '') + `_${suffix}_${hexVal}.png`;
+          zip.file(fname, it.processedBlob);
         }
-
         const zipBlob = await zip.generateAsync({ type: "blob" });
         saveAs(zipBlob, `icons_${currentMode}_${Date.now()}.zip`);
-        qualityStatus.innerHTML = '✅ জিপ তৈরি সম্পূর্ণ!';
-        setTimeout(() => {
-          qualityStatus.innerHTML = '✨ 4K সাপোর্ট | আসল সাইজে ডাউনলোড | 100% থ্রেশহোল্ড';
-        }, 2000);
+        liveStatus.innerHTML = '✅ জিপ রেডি!';
+        setTimeout(() => liveStatus.innerHTML = '<i class="fas fa-rocket"></i> 4K + আসল সাইজ', 2000);
       }
 
-      function clearAll() {
-        for (let img of images) {
-          if (img.originalURL) URL.revokeObjectURL(img.originalURL);
-          if (img.processedURL && img.processedURL !== img.originalURL) URL.revokeObjectURL(img.processedURL);
+      function clearAllItems() {
+        for (let it of iconItems) {
+          if (it.processedURL) URL.revokeObjectURL(it.processedURL);
+          if (it.originalURL && it.originalURL !== it.processedURL) URL.revokeObjectURL(it.originalURL);
         }
-        images = [];
-        renderGallery();
+        iconItems = [];
+        renderGrid();
+        showToast('সব আইকন মুছে ফেলা হয়েছে');
       }
 
-      // মোড চেঞ্জ
-      function setMode(mode) {
-        currentMode = mode;
-        document.querySelectorAll('.mode-btn').forEach(btn => {
-          if (btn.dataset.mode === mode) {
-            btn.classList.add('active');
-          } else {
-            btn.classList.remove('active');
-          }
-        });
-        qualityStatus.innerHTML = mode === 'recolor' ?
-          '🎨 প্রো রিকালার মোড: 100% থ্রেশহোল্ডে সব রং বদলাবে' :
-          '🔮 অটো ট্রেস মোড: এজ স্মুথ + রিকালার';
+      function showToast(msg) {
+        let toast = document.createElement('div');
+        toast.className = 'toast-msg';
+        toast.innerHTML = `<i class="fas fa-check-circle"></i> ${msg}`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2500);
       }
 
-      // ইভেন্ট লিসেনার
-      document.querySelectorAll('.mode-btn').forEach(btn => {
-        btn.addEventListener('click', () => setMode(btn.dataset.mode));
-      });
-
-      uploadBtn.addEventListener('click', () => fileInput.click());
-      fileInput.addEventListener('change', (e) => {
-        if (e.target.files.length) {
-          addFiles(Array.from(e.target.files));
-        }
-        fileInput.value = '';
-      });
+      function escapeHtml(str) { return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m])); }
+      function shortName(s) { return s.length > 28 ? s.slice(0, 25) + '...' : s; }
 
       applyAllBtn.addEventListener('click', applyToAll);
-      zipSelectedBtn.addEventListener('click', zipSelected);
-      clearAllBtn.addEventListener('click', clearAll);
-
-      // ইমেজ সিলেক্টের জন্য ডেলিগেশন
-      document.addEventListener('change', (e) => {
-        if (e.target.classList && e.target.classList.contains('select-checkbox')) {
-          const id = parseInt(e.target.dataset.id);
-          const img = images.find(i => i.id === id);
-          if (img) img.selected = e.target.checked;
-          updateStats();
-        }
-      });
-
-      function escapeHtml(str) {
-        return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
-      }
-
-      function shortName(s) {
-        return s.length > 25 ? s.slice(0, 22) + '...' : s;
-      }
-
-      setMode('recolor');
+      clearAllBtn.addEventListener('click', clearAllItems);
+      zipDownloadBtn.addEventListener('click', downloadSelectedZip);
+      setActiveMode('recolor');
+      renderGrid();
     })();
   </script>
 </body>
